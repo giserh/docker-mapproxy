@@ -1,5 +1,8 @@
 # docker-mapproxy
 
+This is a good way to test MapProxy but probably not good in productions
+since MapProxy is a WSGI app; you should probably run it directly in nginx.
+
 ## What this is
 
 We're running MapProxy in Docker so that we can build a cascading WMS

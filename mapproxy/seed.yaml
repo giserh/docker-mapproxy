@@ -1,0 +1,19 @@
+seeds:
+  myseed1:
+    caches: [osip_cache]
+    # grids: []
+    # coverages: []
+    levels:
+      to: 10
+    refresh_before:
+      time: 2013-10-10T12:35:00
+
+cleanups:
+  myclean1:
+    caches: [osip_cache]
+    remove_before:
+      days: 30
+    levels:
+        from: 16
+
+coverages:
