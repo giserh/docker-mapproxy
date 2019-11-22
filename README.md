@@ -10,17 +10,20 @@ volume mapproxy/cache_data.
 
 ## Configure
 
+Make a volume and put the config files into it,
 Make a folder called mapproxy here.
 The docker will store its files there.
 That way you can configure it.
 
+   docker volume create --name=mapproxy_data
+
+If it's empty the first time you start mapproxy it will write sample config files in there.
+
+### Check the config
+
+   docker-compose config
+
 ## How to run it
 
-Build -- not strictly necessary, all it does is a pull
-
-   make build
-
-Run as a daemon
-
-   make run
+   docker-compose up
 

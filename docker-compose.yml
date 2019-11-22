@@ -1,0 +1,33 @@
+version: '3.6'
+services:
+  mapproxy:
+    container_name: mapproxy
+    image: kartoza/mapproxy
+    env_file: .env
+    environment:
+      VIRTUAL_HOST: ${MAPPROXY_VIRTUAL_HOST}
+      VIRTUAL_PORT: 8080
+      NETWORK_ACCESS: internal
+      LETSENCRYPT_HOST: ${MAPPROXY_VIRTUAL_HOST}
+      LETSENCRYPT_MAIL: ${MY_EMAIL}
+    volumes:
+      - mapproxy_data:/mapproxy
+    restart: unless-stopped
+    networks:
+      - proxy_net
+    expose:
+      - "8081"
+    ports:
+      - "8081:8080"
+
+volumes:
+  mapproxy_data:
+    external: true
+
+networks:
+  # This is a network we share with our reverse proxy
+  proxy_net:
+    name: proxy_net
+    # Won't be created or destroyed with docker-compose up|down
+    external: true
+
