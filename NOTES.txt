@@ -1,0 +1,25 @@
+== Easy ones ==
+lxml
+numpy
+boto3
+requests
+eventlet
+gunicorn
+uwsgi
+yaml-1.3
+prometheus_client
+git+https://github.com/mapproxy/mapproxy.git@master
+
+== Dependencies ==
+When I install mapproxy it will pull these in, so not in requirements.txt
+pillow
+PyYAML
+
+== Hard ones ==
+uwsgi, because you need a c compiler
+imaging, because I don't know what this references
+shapely because it needs libgeos library
+
+How do I install these in Windows?
+libgeos is needed by shapely
+libproj is needed by mapproxy-util

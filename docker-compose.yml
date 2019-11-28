@@ -2,7 +2,6 @@ version: '3.6'
 services:
   mapproxy:
     container_name: mapproxy
-    image: kartoza/mapproxy
     env_file: .env
     environment:
       VIRTUAL_HOST: ${MAPPROXY_VIRTUAL_HOST}
@@ -11,18 +10,45 @@ services:
       LETSENCRYPT_HOST: ${MAPPROXY_VIRTUAL_HOST}
       LETSENCRYPT_MAIL: ${MY_EMAIL}
     volumes:
-      - mapproxy_data:/mapproxy
+      - mapproxy_files:/srv/mapproxy
     restart: unless-stopped
     networks:
       - proxy_net
+      - couchdb_net
     expose:
-      - "8081"
+      - "8080"
+    image: wildsong/mapproxy:latest
+    build:
+      context: .
+
+  db:
+    hostname: couchdb
+    container_name: mapproxy-db
+    image: couchdb:latest
+    env_file: .env
+    environment:
+      VIRTUAL_HOST: ${COUCHDB_VIRTUAL_HOST}
+      VIRTUAL_PORT: 80
+      NETWORK_ACCESS: internal
+      LETSENCRYPT_HOST: ${COUCHDB_VIRTUAL_HOST}
+      LETSENCRYPT_MAIL: ${MY_EMAIL}
+      COUCHDATA: /opt/couchdb/data
+      COUCHDB_USER: ${DB_USER}
+      COUCHDB_SECRET: ${DB_PASSWORD}
+    networks:
+      - couchdb_net
     ports:
-      - "8081:8080"
+      - "5984:5984"
+    volumes:
+      - db_data:/opt/couchdb/data
+    restart: unless-stopped
 
 volumes:
-  mapproxy_data:
-    external: true
+  mapproxy_files:
+      name: mapproxy_files
+
+  db_data:
+     name: mapproxy_couchdb_data
 
 networks:
   # This is a network we share with our reverse proxy
@@ -31,3 +57,6 @@ networks:
     # Won't be created or destroyed with docker-compose up|down
     external: true
 
+  # This network is only used for database access
+  couchdb_net:
+    name: couchdb_net

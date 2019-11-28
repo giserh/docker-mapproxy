@@ -1,0 +1,60 @@
+services:
+  demo:
+  wms:
+    md:
+      title: Clatsop County MapProxy
+      abstract: Proxy of outside services
+
+layers:
+  - name: clatsop_aerials
+    title: Clatsop County aerials
+    layers:
+    - name: osip2018
+      title: Oregon 2018 1'
+      sources: [osip2018_cache]
+
+  - name: astoria_aerials
+    title: City of Astoria aerials
+    layers:
+      - name: astoria2015
+        title: Astoria 2015 6"
+        sources: [astoria2015_cache]
+
+caches:
+  osip2018_cache:
+    grids: [county]
+    sources: [osip2018_source]
+  astoria2015_cache:
+    grids: [astoria]
+    sources: [astoria2015_source]
+            
+sources:
+  osip2018_source:
+    type: arcgis
+    req:
+      url: http://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2018/OSIP_2018_WM/ImageServer
+
+  astoria2015_source:
+    type: wms
+    req:
+      url: https://gis.astoria.or.us/cgi-bin/mapserv.exe?VERSION=1.1.1&MAP=%2Fms4w%2Fapps%2Fastoria31_Public%2Fhtdocs%2Fastoria31%2Fmaps%2F.%2Fair_2015.map&SRS=EPSG%3A3857
+      layers: air_2015
+      transparent: true
+      
+                                            
+grids:
+  county:
+    base: GLOBAL_WEBMERCATOR
+    bbox: [-124.1,45.77,-123.35,46.3] # Clatsop county
+    bbox_srs: EPSG:4326
+
+  astoria:
+    base: GLOBAL_WEBMERCATOR
+    bbox: [-123.87,46.16,-123.73,46.22] # City of Astoria
+    bbox_srs: EPSG:4326
+                                
+globals:
+  cache:
+    base_dir: '/srv/mapproxy/cache_data'
+    lock_dir: '/src/mapproxy/cache_data/locks'
+    tile_lock_dir: '/src/mapproxy/cache_data/tile_locks'
