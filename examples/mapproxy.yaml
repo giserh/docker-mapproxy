@@ -1,0 +1,210 @@
+# Available services:
+# Demo:
+#     https://mapproxy.wildsong.biz/demo
+# WMS:
+#     capabilities: https://mapproxy.wildsong.biz/service?REQUEST=GetCapabilities
+# WMTS:
+#     capabilities: https://mapproxy.wildsong.biz/wmts/1.0.0/WMTSCapabilities.xml
+#     first tile: https://mapproxy.wildsong.biz/wmts/osip/county/0/0/0.png
+# Tile service (compatible with OSIP/etc.)
+#     first tile: https://mapproxy.wildsong.biz/tiles/osip/county/0/0/0.png
+# TMS:
+#     note: TMS is not compatible with OSIP/Google Maps/etc.
+#     fist tile: https://mapproxy.wildsong.biz/tms/1.0.0/osip/county/0/0/0.png
+# KML:
+#     initial doc: https://mapproxy.wildsong.biz/kml/osip/county
+
+services:
+  demo:
+  wms:
+    md:
+      title: Wildsong MapProxy for WMS
+      abstract: WMS Proxy at Wildsong HQ
+  wmts:
+    md:
+      title: Wildsong MapProxy for WMTS
+      abstract: WMTS Proxy at Wildsong HQ
+
+layers:
+  - name: clatsop_aerials
+    title: Clatsop County aerials
+    layers:
+      - name: naip1995
+        title: NAIP 1995 1m
+        sources: [naip1995_cache]
+
+      - name: naip2000
+        title: NAIP 2000 1m
+        sources: [naip2000_cache]
+
+      - name: naip2005
+        title: NAIP 2005 1m
+        sources: [naip2005_cache]
+
+      - name: naip2009
+        title: NAIP 2009 1m
+        sources: [naip2009_cache]
+
+      - name: naip2011
+        title: NAIP 2011 1m
+        sources: [naip2011_cache]
+
+      - name: naip2012
+        title: NAIP 2012 1m
+        sources: [naip2012_cache]
+
+      - name: naip2014
+        title: NAIP 2014 1m
+        sources: [naip2014_cache]
+
+      - name: naip2016
+        title: NAIP 2016 1m
+        sources: [naip2016_cache]
+
+      - name: osip2018
+        title: Oregon 2018 1'
+        sources: [osip2018_cache]
+
+  - name: astoria_aerials
+    title: City of Astoria aerials
+    layers:
+      - name: astoria2015
+        title: Astoria 2015 6"
+        sources: [astoria2015_cache]
+
+      - name: astoria2010
+        title: Astoria 2010
+        sources: [astoria2010_cache]
+
+      - name: astoria2004
+        title: Astoria 2004
+        sources: [astoria2004_cache]
+
+      - name: astoria1994
+        title: Astoria 1994
+        sources: [astoria1994_cache]
+
+caches:
+  naip1995_cache:
+    grids: [county]
+    sources: [naip1995_source]
+  naip2000_cache:
+    grids: [county]
+    sources: [naip2000_source]
+  naip2009_cache:
+    grids: [county]
+    sources: [naip2009_source]
+  naip2011_cache:
+    grids: [county]
+    sources: [naip2011_source]
+  naip2012_cache:
+    grids: [county]
+    sources: [naip2012_source]
+  naip2014_cache:
+    grids: [county]
+    sources: [naip2014_source]
+  naip2005_cache:
+    grids: [county]
+    sources: [naip2005_source]
+  naip2016_cache:
+    grids: [county]
+    sources: [naip2016_source]
+  osip2018_cache:
+    grids: [county]
+    sources: [osip2018_source]
+
+  astoria2015_cache:
+    grids: [astoria]
+    sources: [astoria2015_source]
+  astoria2010_cache:
+    grids: [astoria]
+    sources: [astoria2010_source]
+  astoria2004_cache:
+    grids: [astoria]
+    sources: [astoria2004_source]
+  astoria1994_cache:
+    grids: [astoria]
+    sources: [astoria1994_source]
+            
+sources:
+  naip1995_source:
+    type: arcgis
+    req:
+      url: http://imagery.oregonexplorer.info/arcgis/rest/services/NAIP_1995/NAIP_1995_WM/ImageServer
+  naip2000_source:
+    type: arcgis
+    req:
+      url: http://imagery.oregonexplorer.info/arcgis/rest/services/NAIP_2000/NAIP_2000_WM/ImageServer
+  naip2005_source:
+    type: arcgis
+    req:
+      url: http://imagery.oregonexplorer.info/arcgis/rest/services/NAIP_2005/NAIP_2005_WM/ImageServer
+  naip2009_source:
+    type: arcgis
+    req:
+      url: http://imagery.oregonexplorer.info/arcgis/rest/services/NAIP_2009/NAIP_2009_WM/ImageServer
+  naip2011_source:
+    type: arcgis
+    req:
+      url: http://imagery.oregonexplorer.info/arcgis/rest/services/NAIP_2011/NAIP_2011_WM/ImageServer
+  naip2012_source:
+    type: arcgis
+    req:
+      url: http://imagery.oregonexplorer.info/arcgis/rest/services/NAIP_2012/NAIP_2012_WM/ImageServer
+  naip2014_source:
+    type: arcgis
+    req:
+      url: http://imagery.oregonexplorer.info/arcgis/rest/services/NAIP_2014/NAIP_2014_WM/ImageServer
+  naip2016_source:
+    type: arcgis
+    req:
+      url: http://imagery.oregonexplorer.info/arcgis/rest/services/NAIP_2016/NAIP_2016_WM/ImageServer
+  osip2018_source:
+    type: arcgis
+    req:
+      url: http://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2018/OSIP_2018_WM/ImageServer
+
+  astoria2015_source:
+    type: wms
+    req:
+      url: https://gis.astoria.or.us/cgi-bin/mapserv.exe?VERSION=1.1.1&MAP=%2Fms4w%2Fapps%2Fastoria31_Public%2Fhtdocs%2Fastoria31%2Fmaps%2F.%2Fair_2015.map&SRS=EPSG%3A3857
+      layers: air_2015
+      transparent: true
+  astoria2010_source:
+    type: wms
+    req:
+      url: https://gis.astoria.or.us/cgi-bin/mapserv.exe?VERSION=1.1.1&MAP=%2Fms4w%2Fapps%2Fastoria31_Public%2Fhtdocs%2Fastoria31%2Fmaps%2F.%2Fastoria_aerial_hires_2010.map&SRS=EPSG%3A3857
+      layers: aerials2010
+      transparent: true
+  astoria2004_source:
+    type: wms
+    req:
+      url: https://gis.astoria.or.us/cgi-bin/mapserv.exe?VERSION=1.1.1&MAP=%2Fms4w%2Fapps%2Fastoria31_Public%2Fhtdocs%2Fastoria31%2Fmaps%2F.%2Fastoria_aerial_hires_2004.map&SRS=EPSG%3A3857
+      layers: aerials2004
+      transparent: true
+  astoria1994_source:
+    type: wms
+    req:
+      url: https://gis.astoria.or.us/cgi-bin/mapserv.exe?VERSION=1.1.1&MAP=%2Fms4w%2Fapps%2Fastoria31_Public%2Fhtdocs%2Fastoria31%2Fmaps%2F.%2Fastoria_aerial_bw_1994.map&SRS=EPSG%3A3857
+      layers: aerials1994
+      transparent: true
+
+grids:
+  county:
+    base: GLOBAL_WEBMERCATOR
+    bbox: [-124.1,45.77,-123.35,46.3] # Clatsop county
+    bbox_srs: EPSG:4326
+
+  astoria:
+    base: GLOBAL_WEBMERCATOR
+    bbox: [-123.87,46.16,-123.73,46.22] # City of Astoria
+    bbox_srs: EPSG:4326
+
+globals:
+  cache:
+    base_dir: '/srv/mapproxy/cache_data'
+    lock_dir: '/srv/mapproxy/cache_data/locks'
+    tile_lock_dir: '/srv/mapproxy/cache_data/tile_locks'
+  image:
+      resampling_method: bilinear
+      jpeg_quality: 90

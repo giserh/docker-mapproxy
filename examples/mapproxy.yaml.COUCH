@@ -1,0 +1,66 @@
+# Starts the following services:
+# Demo:
+#     https://mapproxy.wildsong.biz/demo
+# WMS:
+#     capabilities: https://mapproxy.wildsong.biz/service?REQUEST=GetCapabilities
+# WMTS:
+#     capabilities: https://mapproxy.wildsong.biz/wmts/1.0.0/WMTSCapabilities.xml
+#     first tile: https://mapproxy.wildsong.biz/wmts/osip/webmercator/0/0/0.png
+# Tile service (compatible with OSIP/etc.)
+#     first tile: https://mapproxy.wildsong.biz/tiles/osip/webmercator/0/0/0.png
+# TMS:
+#     note: TMS is not compatible with OSIP/Google Maps/etc.
+#     fist tile: https://mapproxy.wildsong.biz/tms/1.0.0/osip/webmercator/0/0/0.png
+# KML:
+#     initial doc: https://mapproxy.wildsong.biz/kml/osip/webmercator
+
+services:
+  demo:
+  wms:
+    md:
+      title: Wildsong MapProxy for WMS
+      abstract: Proxy of services living at Wildsong HQ
+
+layers:
+  - name: aerials
+    title: Aerial imagery
+    sources: [aerials_cache]
+
+caches:
+  aerials_cache:
+    grids: [webmercator]
+    sources: [osip_source]
+    sources: [mywms]
+    grids: [mygrid]
+    type: couchdb
+    url: http://couchdb:5984
+    db_name: aerials_cache
+    tile_metadata: 
+      tile_col: '{{x}}'
+      tile_row: '{{y}}'
+      tile_level: '{{z}}'
+      created_ts: '{{timestamp}}'
+      created: '{{utc_iso}}'
+      center: '{{wgs_tile_centroid}}'
+                                                                                                
+sources:
+  osip_source:
+    type: wms
+    req:
+      url: http://imagery.oregonexplorer.info/arcgis/services/OSIP_2018/OSIP_2018_WM/ImageServer/WMSServer?
+      layers: 0
+
+grids:
+  webmercator:
+    base: GLOBAL_WEBMERCATOR
+    bbox: [-124.2,45.7,-123.28,46.3]
+    bbox_srs: EPSG:4326
+
+globals:
+  cache:
+    base_dir: '/srv/mapproxy/cache_data'
+    lock_dir: '/srv/mapproxy/cache_data/locks'
+    tile_lock_dir: '/srv/mapproxy/cache_data/tile_locks'
+  image:
+      resampling_method: bilinear
+      jpeg_quality: 90
