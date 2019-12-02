@@ -1,20 +1,22 @@
 # docker-mapproxy
 
-This is a good way to test MapProxy but probably not good in productions
-since MapProxy is a WSGI app; you should probably run it directly in nginx.
-
 ## What this is
 
-We're running MapProxy in Docker so that we can build a cascading WMS
-with several servces hosted remotely and have them cache here in a
-volume mapproxy_data/cache_data.
+We run MapProxy in Docker so that we can build a cascading WMS
+with several services hosted remotely and have them cached here.
 
-"Cascading" means one service can have several layers each living in a different remote place.
+We use couchdb as the tile store; the current mapproxy.yaml
+uses couchdb for now.
 
-I plan to use couchdb as the tile store. The docker-compose.yml file will set up both mapproxy
-and couchdb dockers and link them together over a private docker network called 'couchdb_net'.
+The docker-compose.yml file will set up both mapproxy and couchdb
+docker containerss and link them together over a private docker
+network called 'couchdb_net'.
 
 ## Build
+
+We use the standard couchdb image but build our own mapproxy image
+because we want maximum portability, as soon as the ink is dry here
+we're going to add support for Docker For Windows.
 
     docker build -t wildsong/mapproxy .
 
@@ -28,15 +30,11 @@ or if you prefer
 
 Copy sample.env to .env and edit it with your own information.
 
-### Make a volume.
+The first time you run, docker will create a mapproxy_files volume and
+put the default mapproxy.yaml into it, under config/. Refer to the
+mapproxy.org documentation on the files that could go in there.
 
-   docker volume create --name=mapproxy_data
-
-Copy example files into the volume.
-That is, copy the files from mapproxy-docker/examples/config/* to the new volume.
-
-Edit the configuration files.
-The docker will store its files in the cache_data subdirectory.
+I will put some sample files in examples/ for you.
 
 ### Check this project's config
 
@@ -44,12 +42,18 @@ The docker will store its files in the cache_data subdirectory.
 
 ## How to run it
 
+The command
+
    docker-compose up
+
+will start containers for MapProxy and CouchDB.
 
 ### Set up CouchDB
 
 The "up" command will bring up mapproxy and couchdb, but you have to tell couchdb
 that this is a single-node set up so that it will create its system databases.
+
+Use Fauxton to see the setup and make adjustments
 
     http://localhost:5984/_utils#setup
 
@@ -57,6 +61,16 @@ that this is a single-node set up so that it will create its system databases.
 where all you need do is click "Configure a single node". While you are in there
 set the admin user and password.
 
+TODO: Add Windows support
 
+TODO; Fauxton should be using the user/pass from .env but appears to ignore that and starts in admin party mode.
+Maybe running in party mode is okay if I restrict access to the docker network? It qvetches in the log though
+until you create a user.
 
+TODO: Currently you must connect to Fauxton and create databases to hold the tiles.
+I should automate it.
+
+TODO: Add example using MapProxy without CouchDB.
+
+TODO: Show how to use MapProxy and CouchDB on different servers.
 

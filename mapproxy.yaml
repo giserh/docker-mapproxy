@@ -24,9 +24,32 @@ caches:
   osip2018_cache:
     grids: [county]
     sources: [osip2018_source]
+    cache: 
+      type: couchdb
+      db_name: osip2018
+      url: http://couchdb:5984
+      tile_metadata: 
+        tile_col: '{{x}}'
+        tile_row: '{{y}}'
+        tile_level: '{{z}}'
+        created_ts: '{{timestamp}}'
+        created: '{{utc_iso}}'
+        center: '{{wgs_tile_centroid}}'
+            
   astoria2015_cache:
     grids: [astoria]
     sources: [astoria2015_source]
+    cache: 
+      type: couchdb
+      url: http://couchdb:5984
+      db_name: astoria2015
+      tile_metadata: 
+        tile_col: '{{x}}'
+        tile_row: '{{y}}'
+        tile_level: '{{z}}'
+        created_ts: '{{timestamp}}'
+        created: '{{utc_iso}}'
+        center: '{{wgs_tile_centroid}}'
             
 sources:
   osip2018_source:
