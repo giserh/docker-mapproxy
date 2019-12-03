@@ -15,8 +15,10 @@ services:
     networks:
       - proxy_net
       - couchdb_net
-    expose:
-      - "8080"
+    ports:
+      - "8080:8080"
+#    expose:
+#      - "8080"
     image: wildsong/mapproxy:latest
     build:
       context: .
