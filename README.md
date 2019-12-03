@@ -1,5 +1,13 @@
 # docker-mapproxy
 
+There's a bug in 1.12 mapproxy so I have to install from git.
+To see the bug, do this in python
+
+    import mapproxy.compat.modules
+    mapproxy.compat.modules.__dir__()
+
+The output should show the 'escape' function but fails in the released 1.12
+
 ## What this is
 
 We run MapProxy in Docker so that we can build a cascading WMS
