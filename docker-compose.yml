@@ -10,7 +10,7 @@ services:
       LETSENCRYPT_HOST: ${MAPPROXY_VIRTUAL_HOST}
       LETSENCRYPT_MAIL: ${MY_EMAIL}
     volumes:
-      - mapproxy_files:/srv/mapproxy/config
+      - mapproxy_config:/srv/mapproxy/config
     restart: unless-stopped
     networks:
       - proxy_net
@@ -48,8 +48,8 @@ services:
     restart: unless-stopped
 
 volumes:
-  mapproxy_files:
-      name: mapproxy_files
+  mapproxy_config:
+      name: mapproxy_config
       external: true
 
   db_data:
