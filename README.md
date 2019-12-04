@@ -69,6 +69,13 @@ Use Fauxton to see the setup and make adjustments
 where all you need do is click "Configure a single node". While you are in there
 set the admin user and password.
 
+You will need to create two databases for couchdb to work with the example mapproxy.yaml file:
+astoria2015 and osip2018. You can do this through Fauxton or if you want to try out REST,
+use curl commands like this
+
+    curl -X PUT http://localhost:5984/osip2018
+    curl -X PUT http://localhost:5984/astoria2015
+
 TODO: Add Windows support
 
 TODO; Fauxton should be using the user/pass from .env but appears to ignore that and starts in admin party mode.
@@ -81,4 +88,5 @@ I should automate it.
 TODO: Add example using MapProxy without CouchDB.
 
 TODO: Show how to use MapProxy and CouchDB on different servers.
+
 

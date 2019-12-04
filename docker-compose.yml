@@ -9,12 +9,13 @@ services:
       NETWORK_ACCESS: internal
       LETSENCRYPT_HOST: ${MAPPROXY_VIRTUAL_HOST}
       LETSENCRYPT_MAIL: ${MY_EMAIL}
-    volumes:
-      - mapproxy_files:/srv/mapproxy
+#    volumes:
+#      - mapproxy_files:/srv/mapproxy
     restart: unless-stopped
     networks:
       - proxy_net
       - couchdb_net
+# When not using a proxy, I need to expose the port directly on the host
     ports:
       - "8080:8080"
 #    expose:
@@ -47,8 +48,8 @@ services:
     restart: unless-stopped
 
 volumes:
-  mapproxy_files:
-      name: mapproxy_files
+#  mapproxy_files:
+#      name: mapproxy_files
 
   db_data:
      name: mapproxy_couchdb_data
