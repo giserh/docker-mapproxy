@@ -1,0 +1,37 @@
+seeds:
+  seed_osip2018:
+    caches: [osip2018_cache]
+    grids: [county]
+    # coverages: []
+    levels:
+      from: 9
+      to: 17
+    refresh_before:
+      weeks: 3
+
+  seed_astoria2015:
+    caches: [astoria2015_cache]
+    grids: [astoria]
+    # coverages: []
+    levels:
+      from: 9
+      to: 17
+    refresh_before:
+      weeks: 3
+
+cleanups:
+  clean_osip2018:
+    caches: [osip2018_cache]
+    remove_before:
+      days: 600
+    levels:
+        from: 16
+
+  clean_astoria2015:
+    caches: [astoria2015_cache]
+    remove_before:
+      days: 2000
+    levels:
+        from: 16
+
+coverages:
