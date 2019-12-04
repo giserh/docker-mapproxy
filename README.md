@@ -90,3 +90,29 @@ TODO: Add example using MapProxy without CouchDB.
 TODO: Show how to use MapProxy and CouchDB on different servers.
 
 
+## How to seed the cache
+
+Edit the seed.yaml in config to match your requirements. It's set up for the osip2018 example.
+(You need to edit the copy that's in the Docker volume. In my case as root I edit
+/home/docker/volumes/mapproxy_files/_data/seed.yaml.)
+
+Start a shell connection to the running docker for mapproxy.
+
+   docker exec -it mapproxy bash
+
+Run the seed command. (The "-c 4" says use 4 processes)
+
+   cd config
+   mapproxy-seed -c 4 -f mapproxy.yaml -s seed.yaml
+
+On Linux you could run it in background.
+
+There are some other potentially useful options such as --continue
+and --progress-file. RTFM: https://mapproxy.org/docs/nightly/seed.html
+
+I think it might make sense to run the seed process in a separate container,
+there's no reason it has to be in the same one with mapproxy. Since it's
+storing tiles into couch_db it does not even have to run on the same server.
+
+
+

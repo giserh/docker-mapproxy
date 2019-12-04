@@ -39,6 +39,8 @@ RUN mkdir -p $MAPPROXY_BASE/cache_data
 
 WORKDIR $MAPPROXY_BASE/config
 COPY mapproxy.yaml .
+COPY seed.yaml .
+VOLUME $MAPPROXY_BASE/config
 
 # Start a waitress WSGI server, set the port as desired.
 # Make sure it matches the VIRTUAL_PORT setting in docker-compose.yml if you use that.
