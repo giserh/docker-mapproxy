@@ -41,6 +41,12 @@ in the released 1.12.  I plan on using the released package at 1.13.
 
 ## Configure
 
+The default in the example is to use multiple services. That's defined in the files
+globals.yaml, city-aerials.yaml and county-aerials.yaml.
+
+You can edit the start_mapproxy.py and use mapproxy.yaml if you want a
+single service only.
+
 ### Set up .env
 
 Copy sample.env to .env and edit it with your own information.
@@ -89,20 +95,6 @@ You can create them anytime and the errors will stop; that is, it won't hurt any
 to start everything running before creating the databases. (There is no reason to start
 the database first, create the databases, and then start MapProxy.)
 
-TODO: Add Windows support
-
-TODO; Fauxton should be using the user/pass from .env but appears to ignore that and starts in admin party mode.
-Maybe running in party mode is okay if I restrict access to the docker network? It qvetches in the log though
-until you create a user.
-
-TODO: Currently you must connect to Fauxton and create databases to hold the tiles.
-I should automate it.
-
-TODO: Add example using MapProxy without CouchDB.
-
-TODO: Show how to use MapProxy and CouchDB on different servers.
-
-
 ## How to seed the cache
 
 Edit the seed.yaml in config to match your requirements. It's set up for the osip2018 example.
@@ -127,7 +119,31 @@ I think it might make sense to run the seed process in a separate container,
 there's no reason it has to be in the same one with mapproxy. Since it's
 storing tiles into couch_db it does not even have to run on the same server.
 
+## TO DO LIST
 
+As of 2019-Dec-06
 
-TODO -- couchdb user/password is not getting set, possibly the environment is not set correctly
-on startup??
+I was reading the "Production" section of the MapProxy docs and learned one of their
+recommended setups is to use waitress as the server, which is what I do here, but that
+they recommend putting waitress behind a web proxy, for example nginx or varnish.
+
+I am looking into this more but yesterday I found that putting
+waitress behind nginx prevented me from creating services in ArcGIS
+Enterprise. (SHOWSTOPPER for me!) Just a warning. I will look at it again...
+
+TODO: Add Windows support, I've had this in mind all along, should not be TOO hard... ha...
+it's why I use miniconda as the base container and waitress instead of gunicorn as the server.
+
+TODO; Fauxton should be using the user/pass from .env but appears to
+ignore that and starts in admin party mode.  Maybe running in party
+mode is okay if I restrict access to the docker network? It qvetches
+in the log though until you create a user. Possibly the environment is
+not set correctly on startup??
+
+TODO: Currently you must manually create databases to hold the tiles.
+Maybe I should automate it?
+
+TODO: Add example using MapProxy without CouchDB.
+
+TODO: Show how to use MapProxy and CouchDB on different servers. (SWARM!)
+
