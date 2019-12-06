@@ -119,6 +119,20 @@ I think it might make sense to run the seed process in a separate container,
 there's no reason it has to be in the same one with mapproxy. Since it's
 storing tiles into couch_db it does not even have to run on the same server.
 
+## Credits
+
+There are other Docker projects built for MapProxy. I wanted one that
+could be ported to Windows (Docker for Windows). I am not there yet.
+I also wanted to be able to spin up the MapProxy/CouchDB combination
+easily.
+
+Links to some of the code I use
+
+* MapProxy https://mapproxy.org
+* CouchDB https://couchdb.apache.org
+* Conda https://anaconda.org (I use a version of miniconda)
+* Waitress https://github.com/Pylons/waitress
+
 ## TO DO LIST
 
 As of 2019-Dec-06
