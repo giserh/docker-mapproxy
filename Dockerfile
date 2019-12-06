@@ -38,12 +38,17 @@ COPY log.ini .
 RUN mkdir -p $MAPPROXY_BASE/cache_data
 
 WORKDIR $MAPPROXY_BASE/config
-COPY mapproxy.yaml .
+COPY globals.yaml .
 COPY seed.yaml .
+
+WORKDIR $MAPPROXY_BASE/config/services
+COPY city-aerials.yaml .
+COPY county-aerials.yaml .
+
 VOLUME $MAPPROXY_BASE/config
 
 # Start a waitress WSGI server, set the port as desired.
 # Make sure it matches the VIRTUAL_PORT setting in docker-compose.yml if you use that.
 WORKDIR $MAPPROXY_BASE
 EXPOSE 8080
-CMD python3 start_mapproxy.py $MAPPROXY_BASE/log.ini $MAPPROXY_BASE/config/mapproxy.yaml 8080
+CMD python3 start_mapproxy.py $MAPPROXY_BASE/log.ini $MAPPROXY_BASE/config/services 8080

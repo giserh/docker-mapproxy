@@ -50,7 +50,6 @@ services:
 volumes:
   mapproxy_config:
       name: mapproxy_config
-      external: true
 
   db_data:
      name: mapproxy_couchdb_data

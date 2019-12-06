@@ -1,0 +1,80 @@
+base: ../globals.yaml
+
+layers:
+  - name: astoria
+    title: City of Astoria
+    layers:
+      - name: astoria2015
+        title: Astoria 2015 6"
+        sources: [astoria2015_cache]
+
+  - name: warrenton 
+    title: City of Warrenton
+    layers:
+      - name: warrenton
+        title: Warrenton 2011 6"
+        sources: [warrenton2011_cache]
+
+caches:
+  astoria2015_cache:
+    grids: [astoria]
+    sources: [astoria2015_source]
+
+    # faster than PNG
+    format: image/jpeg
+    # recommended for aerials
+    image:
+      resampling_method: bilinear
+
+    cache: 
+      type: couchdb
+      url: http://couchdb:5984
+      db_name: astoria2015
+      tile_metadata: 
+        tile_col: '{{x}}'
+        tile_row: '{{y}}'
+        tile_level: '{{z}}'
+        created_ts: '{{timestamp}}'
+        created: '{{utc_iso}}'
+        center: '{{wgs_tile_centroid}}'
+  warrenton2011_cache:
+    grids: [warrenton]
+    sources: [warrenton2011_source]
+    cache: 
+      type: couchdb
+      url: http://couchdb:5984
+      db_name: warrenton2011
+      tile_metadata: 
+        tile_col: '{{x}}'
+        tile_row: '{{y}}'
+        tile_level: '{{z}}'
+        created_ts: '{{timestamp}}'
+        created: '{{utc_iso}}'
+        center: '{{wgs_tile_centroid}}'
+            
+sources:
+  astoria2015_source:
+    type: wms
+    req:
+      url: https://gis.astoria.or.us/cgi-bin/mapserv.exe?VERSION=1.1.1&MAP=%2Fms4w%2Fapps%2Fastoria31_Public%2Fhtdocs%2Fastoria31%2Fmaps%2F.%2Fair_2015.map&SRS=EPSG%3A3857
+      layers: air_2015
+      transparent: true
+      
+  warrenton2011_source:
+    type: wms
+    req:
+      url: https://gis.astoria.or.us/cgi-bin/mapserv.exe?VERSION=1.1.1&MAP=%2Fms4w%2Fapps%2Fastoria31_Public%2Fhtdocs%2Fastoria31%2Fmaps%2F.%2Fair_2015.map&SRS=EPSG%3A3857
+      layers: air_2015
+      transparent: true
+      
+                                            
+grids:
+  astoria:
+    base: GLOBAL_WEBMERCATOR
+    bbox: [-123.87,46.16,-123.73,46.22] # City of Astoria
+    bbox_srs: EPSG:4326
+                                
+  warrenton:
+    base: GLOBAL_WEBMERCATOR
+    bbox: [-123.87,46.16,-123.73,46.22] # City of Astoria
+    bbox_srs: EPSG:4326

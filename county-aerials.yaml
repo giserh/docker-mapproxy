@@ -1,0 +1,153 @@
+base: ../globals.yaml
+
+layers:
+  - name: clatsop_aerials
+    title: Clatsop County aerials
+    layers:
+    - name: osip2018
+      title: Oregon 2018 1'
+      sources: [osip2018_cache]
+
+caches:
+  osip2018_cache:
+    grids: [county]
+    sources: [osip2018_source]
+
+    # faster than PNG
+    format: image/jpeg
+    # recommended for aerials
+    image:
+      resampling_method: bilinear
+
+    cache:
+      type: couchdb
+      db_name: osip2018
+      url: http://couchdb:5984
+      tile_metadata: 
+        tile_col: '{{x}}'
+        tile_row: '{{y}}'
+        tile_level: '{{z}}'
+        created_ts: '{{timestamp}}'
+        created: '{{utc_iso}}'
+        center: '{{wgs_tile_centroid}}'
+            
+  naip2016_cache:
+    grids: [county]
+    sources: [naip2016_source]
+
+    # faster than PNG
+    format: image/jpeg
+    # recommended for aerials
+    image:
+      resampling_method: bilinear
+
+    cache:
+      type: couchdb
+      db_name: naip2016
+      url: http://couchdb:5984
+      tile_metadata: 
+        tile_col: '{{x}}'
+        tile_row: '{{y}}'
+        tile_level: '{{z}}'
+        created_ts: '{{timestamp}}'
+        created: '{{utc_iso}}'
+        center: '{{wgs_tile_centroid}}'
+            
+  naip2009_cache:
+    grids: [county]
+    sources: [naip2009_source]
+
+    # faster than PNG
+    format: image/jpeg
+    # recommended for aerials
+    image:
+      resampling_method: bilinear
+
+    cache:
+      type: couchdb
+      db_name: naip2009
+      url: http://couchdb:5984
+      tile_metadata: 
+        tile_col: '{{x}}'
+        tile_row: '{{y}}'
+        tile_level: '{{z}}'
+        created_ts: '{{timestamp}}'
+        created: '{{utc_iso}}'
+        center: '{{wgs_tile_centroid}}'
+            
+  naip2000_cache:
+    grids: [county]
+    sources: [naip2000_source]
+
+    # faster than PNG
+    format: image/jpeg
+    # recommended for aerials
+    image:
+      resampling_method: bilinear
+
+    cache:
+      type: couchdb
+      db_name: naip2000
+      url: http://couchdb:5984
+      tile_metadata: 
+        tile_col: '{{x}}'
+        tile_row: '{{y}}'
+        tile_level: '{{z}}'
+        created_ts: '{{timestamp}}'
+        created: '{{utc_iso}}'
+        center: '{{wgs_tile_centroid}}'
+            
+  naip1995_cache:
+    grids: [county]
+    sources: [naip1995_source]
+
+    # faster than PNG
+    format: image/jpeg
+    # recommended for aerials
+    image:
+      resampling_method: bilinear
+
+    cache:
+      type: couchdb
+      db_name: naip1995
+      url: http://couchdb:5984
+      tile_metadata: 
+        tile_col: '{{x}}'
+        tile_row: '{{y}}'
+        tile_level: '{{z}}'
+        created_ts: '{{timestamp}}'
+        created: '{{utc_iso}}'
+        center: '{{wgs_tile_centroid}}'
+            
+sources:
+  osip2018_source:
+    type: arcgis
+    req:
+      url: http://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2018/OSIP_2018_WM/ImageServer
+
+  naip2016_source:
+    type: arcgis
+    req:
+      url: http://imagery.oregonexplorer.info/arcgis/rest/services/NAIP_2016/NAIP_2016_WM/ImageServer
+
+  naip2016_source:
+    type: arcgis
+    req:
+      url: http://imagery.oregonexplorer.info/arcgis/rest/services/NAIP_2016/NAIP_2016_WM/ImageServer
+
+  naip2009_source:
+    type: arcgis
+    req:
+      url: http://imagery.oregonexplorer.info/arcgis/rest/services/NAIP_2009/NAIP_2009_WM/ImageServer
+
+  naip1995_source:
+    type: arcgis
+    req:
+      url: http://imagery.oregonexplorer.info/arcgis/rest/services/NAIP_1995/NAIP_1995_WM/ImageServer
+
+grids:
+  county:
+    base: GLOBAL_WEBMERCATOR
+    bbox: [-124.1,45.77,-123.35,46.3] # Clatsop county
+    bbox_srs: EPSG:4326
+

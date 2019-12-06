@@ -1,0 +1,29 @@
+services:
+  demo:
+  wms:
+    md:
+      title: Clatsop County MapProxy
+      abstract: Proxy of outside services
+
+config_dir: services
+allow_listing: true
+
+grids:
+  county:
+    base: GLOBAL_WEBMERCATOR
+    bbox: [-124.1,45.77,-123.35,46.3] # Clatsop county
+    bbox_srs: EPSG:4326
+
+  astoria:
+    base: GLOBAL_WEBMERCATOR
+    bbox: [-123.87,46.16,-123.73,46.22] # City of Astoria
+    bbox_srs: EPSG:4326
+                                
+globals:
+  cache:
+    base_dir: '/srv/mapproxy/cache_data'
+    lock_dir: '/src/mapproxy/cache_data/locks'
+    tile_lock_dir: '/src/mapproxy/cache_data/tile_locks'
+
+  # lower quality = faster
+  jpeg_quality: 80

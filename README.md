@@ -1,22 +1,18 @@
 # docker-mapproxy
 
-There's a bug in 1.12 mapproxy so I have to install from git.
-To see the bug, do this in python
-
-    import mapproxy.compat.modules
-    mapproxy.compat.modules.__dir__()
-
-The output should show the 'escape' function but fails in the released 1.12
-
 ## What this is
 
-We run MapProxy in Docker so that we can build a cascading WMS
-with several services hosted remotely and have them cached here.
+MapProxy in Docker is used to build a cascading WMS with several
+services hosted remotely. The included configuration works with a
+public server located in Oregon.
 
-We use couchdb as the tile store; the current mapproxy.yaml
-uses couchdb for now.
+The tiles are cached in a tile store; this project uses CouchDB for storage.
 
-The docker-compose.yml file will set up both mapproxy and couchdb
+This version of the project uses Docker Compose; the next version will
+use Docker Swarm instead, so that the containers can be on different
+servers.
+
+The docker-compose.yml file will set up both MapProxy and CouchDB
 docker containerss and link them together over a private docker
 network called 'couchdb_net'.
 
@@ -31,6 +27,17 @@ we're going to add support for Docker For Windows.
 or if you prefer
 
     docker-compose build
+
+### Note on git version
+
+There's a bug in 1.12 mapproxy so the Dockerfile pulls newer source from git.
+To see the bug, do this in python 3.8 (it won't affect older pythons).
+
+    import mapproxy.compat.modules
+    mapproxy.compat.modules.__dir__()
+
+The output should show the 'escape' function is available, but fails
+in the released 1.12.  I plan on using the released package at 1.13.
 
 ## Configure
 
@@ -71,10 +78,16 @@ set the admin user and password.
 
 You will need to create two databases for couchdb to work with the example mapproxy.yaml file:
 astoria2015 and osip2018. You can do this through Fauxton or if you want to try out REST,
-use curl commands like this
+use curl commands like this for instance
 
-    curl -X PUT http://localhost:5984/osip2018
-    curl -X PUT http://localhost:5984/astoria2015
+    for SVC in osip2018 naip2016 naip2009 naip2000 naip1995 astora2015; do
+      curl -X PUT http://localhost:5984/$SVC
+
+If you start the components running and don't have the databases set up, you will get
+errors logged from the database container when MapProxy tries to send tiles to CouchDB.
+You can create them anytime and the errors will stop; that is, it won't hurt anything
+to start everything running before creating the databases. (There is no reason to start
+the database first, create the databases, and then start MapProxy.)
 
 TODO: Add Windows support
 
@@ -116,3 +129,5 @@ storing tiles into couch_db it does not even have to run on the same server.
 
 
 
+TODO -- couchdb user/password is not getting set, possibly the environment is not set correctly
+on startup??
