@@ -44,6 +44,7 @@ COPY seed.yaml .
 WORKDIR $MAPPROXY_BASE/config/services
 COPY city-aerials.yaml .
 COPY county-aerials.yaml .
+COPY lidar.yaml .
 
 VOLUME $MAPPROXY_BASE/config
 

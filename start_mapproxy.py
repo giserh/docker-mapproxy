@@ -14,11 +14,12 @@ except:
     myport=8080
 
 # This version starts the multi service, config should be a directory.
+# note that reloader option is not available here
 from mapproxy.multiapp import make_wsgi_app
 application = make_wsgi_app(config, allow_listing = True)
 
 # This version starts just one, config should be a mapproxy.yaml file.
 #from mapproxy.wsgiapp import make_wsgi_app
-#application = make_wsgi_app(config, allow_listing = True)
+#application = make_wsgi_app(config, reloader = True)
 
 waitress.serve(application, threads=16, host='0.0.0.0', port=myport)

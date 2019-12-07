@@ -86,9 +86,10 @@ You will need to create two databases for couchdb to work with the example mappr
 astoria2015 and osip2018. You can do this through Fauxton or if you want to try out REST,
 use curl commands like this for instance
 
-    for SVC in osip2018 naip2016 naip2009 naip2000 naip1995 astora2015; do
+    for SVC in `grep db_name: *yaml | sed -e 's/.*db_name: //g'` ; do
       curl -X PUT http://localhost:5984/$SVC
-
+    done
+    
 If you start the components running and don't have the databases set up, you will get
 errors logged from the database container when MapProxy tries to send tiles to CouchDB.
 You can create them anytime and the errors will stop; that is, it won't hurt anything
