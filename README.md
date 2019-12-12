@@ -74,17 +74,20 @@ will start containers for MapProxy and CouchDB.
 The "up" command will bring up mapproxy and couchdb, but you have to tell couchdb
 that this is a single-node set up so that it will create its system databases.
 
-Use Fauxton to see the setup and make adjustments
+If you never set an admin user and password, MapProxy will create databases on its own,
+but personally I can't bring myself to leave it unconfigured.
+
+Use Fauxton to see the setup and make adjustments,
 
     http://localhost:5984/_utils#setup
 
-(Of course, substitute the appropriate value for localhost.) You get a page
-where all you need do is click "Configure a single node". While you are in there
-set the admin user and password.
+You will see a page where all you need do is click "Configure a single
+node". While you are in there set the admin user and password, use the
+icon of a person at the bottom of the nav bar.
 
-You will need to create two databases for couchdb to work with the example mapproxy.yaml file:
-astoria2015 and osip2018. You can do this through Fauxton or if you want to try out REST,
-use curl commands like this for instance
+You can create databases for couchdb to work with the example
+mapproxy.yaml file, you can do this through Fauxton or if you want to
+try out REST, use curl commands like this for instance (see also create_databases.sh)
 
     for SVC in `grep db_name: *yaml | sed -e 's/.*db_name: //g'` ; do
       curl -X PUT http://localhost:5984/$SVC
