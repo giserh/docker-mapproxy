@@ -120,7 +120,12 @@ sources:
       url: https://gis.astoria.or.us/cgi-bin/mapserv.exe?VERSION=1.1.1&MAP=%2Fms4w%2Fapps%2Fastoria31_Public%2Fhtdocs%2Fastoria31%2Fmaps%2F.%2Fair_2015.map&SRS=EPSG%3A3857
       layers: air_2015
       transparent: true
-
+    # This photo has a large non-transparent black area outside the photo; clip it off.
+    coverage:
+      datasource: Astoria2015_coverage.geojson
+      srs: "EPSG:3857"
+      clip: true
+      
   astoria2010_source:
     type: wms
     req:
