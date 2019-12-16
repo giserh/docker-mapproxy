@@ -43,9 +43,9 @@ COPY seed.yaml .
 
 WORKDIR $MAPPROXY_BASE/config/services
 COPY city-aerials.yaml .
+COPY Astoria2015_coverage.geojson .
 COPY county-aerials.yaml .
 COPY lidar.yaml .
-
 VOLUME $MAPPROXY_BASE/config
 
 # Start a waitress WSGI server, set the port as desired.
