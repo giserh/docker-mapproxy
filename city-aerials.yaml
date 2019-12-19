@@ -45,11 +45,13 @@ layers:
 #        sources: [warrenton2011_cache]
 
 caches:
+  # I'm using PNG images here to get a transparent background
+
   astoria2015_cache:
     grids: [astoria]
     sources: [astoria2015_source]
-    format: image/jpeg
-    request_format: image/jpeg
+    format: image/png
+    request_format: image/png
     cache: 
       type: couchdb
       url: http://couchdb:5984
@@ -65,8 +67,8 @@ caches:
   astoria2010_cache:
     grids: [astoria]
     sources: [astoria2010_source]
-    format: image/jpeg
-    request_format: image/jpeg
+    format: image/png
+    request_format: image/png
     cache: 
       type: couchdb
       url: http://couchdb:5984
@@ -82,8 +84,8 @@ caches:
   astoria2004_cache:
     grids: [astoria]
     sources: [astoria2004_source]
-    format: image/jpeg
-    request_format: image/jpeg
+    format: image/png
+    request_format: image/png
     cache: 
       type: couchdb
       url: http://couchdb:5984
@@ -121,6 +123,7 @@ sources:
       layers: air_2015
       transparent: true
     # This photo has a large non-transparent black area outside the photo; clip it off.
+    # Then use PNG as the image format so that the clipped areas will be transparent not white.
     coverage:
       datasource: Astoria2015_coverage.geojson
       srs: "EPSG:3857"
@@ -132,6 +135,12 @@ sources:
       url: https://gis.astoria.or.us/cgi-bin/mapserv.exe?SERVICE=WMS&VERSION=1.1.1&MAP=%2Fms4w%2Fapps%2Fastoria31_Public%2Fhtdocs%2Fastoria31%2Fmaps%2F.%2Fastoria_aerial_hires_2010.map&SRS=EPSG%3A3857
       layers: aerials2010
       transparent: true
+    # This photo has a large non-transparent black area outside the photo; clip it off.
+    # Then use PNG as the image format so that the clipped areas will be transparent not white.
+    coverage:
+      datasource: Astoria2010_coverage.geojson
+      srs: "EPSG:3857"
+      clip: true
 # https://gis.astoria.or.us/cgi-bin/mapserv.exe?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&FORMAT=image%2Fpng%3Bbits%3D8&TRANSPARENT=true&LAYERS=aerials2010&MAP=%2Fms4w%2Fapps%2Fastoria31_Public%2Fhtdocs%2Fastoria31%2Fmaps%2F.%2Fastoria_aerial_hires_2010.map&SRS=EPSG%3A3857&STYLES=&MAP_RESOLUTION=112.5&WIDTH=1333&HEIGHT=1026&BBOX=-13786760.476540796%2C5809172.109307839%2C-13784213.212573193%2C5811132.719083354
 
   astoria2004_source:
@@ -140,6 +149,12 @@ sources:
       url: https://gis.astoria.or.us/cgi-bin/mapserv.exe?SERVICE=WMS&VERSION=1.1.1&MAP=%2Fms4w%2Fapps%2Fastoria31_Public%2Fhtdocs%2Fastoria31%2Fmaps%2F.%2Fastoria_aerial_hires_2004.map&SRS=EPSG%3A3857
       layers: aerials2004
       transparent: true
+    # This photo has a large non-transparent black area outside the photo; clip it off.
+    # Then use PNG as the image format so that the clipped areas will be transparent not white.
+    coverage:
+      datasource: Astoria2004_coverage.geojson
+      srs: "EPSG:3857"
+      clip: true
 # https://gis.astoria.or.us/cgi-bin/mapserv.exe?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&FORMAT=image%2Fpng%3Bbits%3D8&TRANSPARENT=true&LAYERS=aerials2004&MAP=%2Fms4w%2Fapps%2Fastoria31_Public%2Fhtdocs%2Fastoria31%2Fmaps%2F.%2Fastoria_aerial_hires_2004.map&SRS=EPSG%3A3857&STYLES=&MAP_RESOLUTION=112.5&WIDTH=1333&HEIGHT=1026&BBOX=-13786760.476540796%2C5809172.109307839%2C-13784213.212573193%2C5811132.719083354
 
   warrenton2011_source:
