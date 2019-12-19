@@ -16,6 +16,11 @@ The docker-compose.yml file will set up both MapProxy and CouchDB
 docker containerss and link them together over a private docker
 network called 'couchdb_net'.
 
+ArcGIS servers refuse to connect to unencrypted WMS services (HTTP).
+I get around this by running MapProxy behind an nginx server. The
+Docker Compose file here is set up to work with the one described in
+my github repository Wildsong/proxy.
+
 ## Build
 
 We use the standard couchdb image but build our own mapproxy image
@@ -123,6 +128,19 @@ I think it might make sense to run the seed process in a separate container,
 there's no reason it has to be in the same one with mapproxy. Since it's
 storing tiles into couch_db it does not even have to run on the same server.
 
+## Updating the configuration
+
+If you edit the files once everything is up and running you can copy new ones into the
+containers, for example,
+
+    for f in As*geojson city*yaml; do
+      docker cp $f mapproxy://srv/mapproxy/config/services/
+    done
+    
+I suppose you need to restart MapProxy to get it to reread the change.
+Remember to empty the appropriate cache database(s) in CouchDB so that they will
+get new data.
+
 ## Credits
 
 There are other Docker projects built for MapProxy. I wanted one that
@@ -139,18 +157,11 @@ Links to some of the code I use
 
 ## TO DO LIST
 
-As of 2019-Dec-06
+As of 2019-Dec-19
 
-I was reading the "Production" section of the MapProxy docs and learned one of their
-recommended setups is to use waitress as the server, which is what I do here, but that
-they recommend putting waitress behind a web proxy, for example nginx or varnish.
-
-I am looking into this more but yesterday I found that putting
-waitress behind nginx prevented me from creating services in ArcGIS
-Enterprise. (SHOWSTOPPER for me!) Just a warning. I will look at it again...
-
-TODO: Add Windows support, I've had this in mind all along, should not be TOO hard... ha...
-it's why I use miniconda as the base container and waitress instead of gunicorn as the server.
+I pretty much have stopped work on a Windows Server version because it was just too
+easy to get a Debian container running. We have the best IT staff in the world here
+in Clatsop County.
 
 TODO; Fauxton should be using the user/pass from .env but appears to
 ignore that and starts in admin party mode.  Maybe running in party
