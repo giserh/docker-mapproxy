@@ -2,38 +2,41 @@ base: ../globals.yaml
 
 layers:
 
-  - name: naip1995
-    title: NAIP 1995 1m orthophoto
-    md:
-      attribution:
-        title: Oregon Explorer Natural Resources Digital Library
-        url: https://oregonexplorer.info/
-    layers:
-    - name: naip1995
-      title: NAIP 1995 1m orthophoto
-      sources: [naip1995_cache]
-
-  - name: naip2000
-    title: NAIP 2000 1m orthophoto
-    md:
-      attribution:
-        title: Oregon Explorer Natural Resources Digital Library
-        url: https://oregonexplorer.info/
-    layers:
-    - name: naip2000
-      title: NAIP 2000 1m orthophoto
-      sources: [naip2000_cache]
-
-  - name: naip2009
-    title: NAIP 2009 1m orthophoto
-    md:
-      attribution:
-        title: Oregon Explorer Natural Resources Digital Library
-        url: https://oregonexplorer.info/
-    layers:
-    - name: naip2009
-      title: NAIP 2009 1m orthophoto
-      sources: [naip2009_cache]
+# 1995, 2000, 2009
+# Not working for some reason, tried WMS, WMTS, and State Lambert, they only work in ArcMap!
+#
+#  - name: naip1995
+#    title: NAIP 1995 1m orthophoto
+#    md:
+#      attribution:
+#        title: Oregon Explorer Natural Resources Digital Library
+#        url: https://oregonexplorer.info/
+#    layers:
+#    - name: naip1995
+#      title: NAIP 1995 1m orthophoto
+#      sources: [naip1995_cache]
+#
+#  - name: naip2000
+#    title: NAIP 2000 1m orthophoto
+#    md:
+#      attribution:
+#        title: Oregon Explorer Natural Resources Digital Library
+#        url: https://oregonexplorer.info/
+#    layers:
+#    - name: naip2000
+#      title: NAIP 2000 1m orthophoto
+#      sources: [naip2000_cache]
+#
+#  - name: naip2009
+#    title: NAIP 2009 1m orthophoto
+#    md:
+#      attribution:
+#        title: Oregon Explorer Natural Resources Digital Library
+#        url: https://oregonexplorer.info/
+#    layers:
+#    - name: naip2009
+#      title: NAIP 2009 1m orthophoto
+#      sources: [naip2009_cache]
 
   - name: naip2014
     title: NAIP 2014 1m orthophoto
