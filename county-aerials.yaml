@@ -6,69 +6,69 @@ layers:
 # Not working for some reason, tried WMS, WMTS, and State Lambert, they only work in ArcMap!
 #
 #  - name: naip1995
-#    title: NAIP 1995 1m orthophoto
+#    title: NAIP 1995 1m
 #    md:
 #      attribution:
 #        title: Oregon Explorer Natural Resources Digital Library
 #        url: https://oregonexplorer.info/
 #    layers:
 #    - name: naip1995
-#      title: NAIP 1995 1m orthophoto
+#      title: NAIP 1995 1m
 #      sources: [naip1995_cache]
 #
 #  - name: naip2000
-#    title: NAIP 2000 1m orthophoto
+#    title: NAIP 2000 1m
 #    md:
 #      attribution:
 #        title: Oregon Explorer Natural Resources Digital Library
 #        url: https://oregonexplorer.info/
 #    layers:
 #    - name: naip2000
-#      title: NAIP 2000 1m orthophoto
+#      title: NAIP 2000 1m
 #      sources: [naip2000_cache]
 #
 #  - name: naip2009
-#    title: NAIP 2009 1m orthophoto
+#    title: NAIP 2009 1m
 #    md:
 #      attribution:
 #        title: Oregon Explorer Natural Resources Digital Library
 #        url: https://oregonexplorer.info/
 #    layers:
 #    - name: naip2009
-#      title: NAIP 2009 1m orthophoto
+#      title: NAIP 2009 1m
 #      sources: [naip2009_cache]
 
   - name: naip2014
-    title: NAIP 2014 1m orthophoto
+    title: NAIP 2014 1m
     md:
       attribution:
         title: Oregon Explorer Natural Resources Digital Library
         url: https://oregonexplorer.info/
     layers:
     - name: naip2014
-      title: NAIP 2014 1m orthophoto
+      title: NAIP 2014 1m
       sources: [naip2014_cache]
 
   - name: naip2016
-    title: NAIP 2016 1m orthophoto
+    title: NAIP 2016 1m
     md:
       attribution:
         title: Oregon Explorer Natural Resources Digital Library
         url: https://oregonexplorer.info/
     layers:
     - name: naip2016
-      title: NAIP 2016 1m orthophoto
+      title: NAIP 2016 1m
       sources: [naip2016_cache]
 
   - name: osip2018
-    title: OSIP 2018 1' orthophoto
+    title: OSIP 2018 1'
     md:
       attribution:
         title: Oregon Explorer Natural Resources Digital Library
         url: https://oregonexplorer.info/
     layers:
     - name: osip2018
-      title: OSIP 2018 1' orthophoto
+      title: OSIP 2018 1'
       sources: [osip2018_cache]
 
 caches:
