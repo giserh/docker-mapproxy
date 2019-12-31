@@ -1,0 +1,47 @@
+base: ../globals.yaml
+
+layers:
+  - name: NWI
+    title: US FWS National Wetland Inventory
+    md:
+      attribution:
+        title: US Fish and Wildlife Service
+        url: https://fws.gov/wetlands/Data/Web-Map-Services.html
+    layers:
+      - name: Wetlands
+        title: Wetlands
+        sources: [nwi_cache]
+
+caches:
+  # I'm using PNG images here to get a transparent background
+
+  nwi_cache:
+    grids: [county]
+    sources: [nwi_source]
+    format: image/png
+    request_format: image/png
+    cache: 
+      type: couchdb
+      url: http://couchdb:5984
+      db_name: usfws_nwi
+      tile_metadata: 
+        tile_col: '{{x}}'
+        tile_row: '{{y}}'
+        tile_level: '{{z}}'
+        created_ts: '{{timestamp}}'
+        created: '{{utc_iso}}'
+        center: '{{wgs_tile_centroid}}'
+
+sources:
+  nwi_source:
+    type: wms
+    req:
+      url: https://www.fws.gov/wetlands/arcgis/services/Wetlands/MapServer/WMSServer
+      layers: Wetlands
+      transparent: true
+      
+grids:
+  county:
+    base: GLOBAL_WEBMERCATOR
+    bbox: [-124.1,45.77,-123.35,46.3] # Clatsop county
+    bbox_srs: EPSG:4326

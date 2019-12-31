@@ -48,6 +48,7 @@ COPY Astoria2010_coverage.geojson .
 COPY Astoria2004_coverage.geojson .
 COPY county-aerials.yaml .
 COPY lidar.yaml .
+COPY usfws-nwi.yaml .
 VOLUME $MAPPROXY_BASE/config
 
 # Start a waitress WSGI server, set the port as desired.
