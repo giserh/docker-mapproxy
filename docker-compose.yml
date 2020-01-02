@@ -11,6 +11,7 @@ services:
       LETSENCRYPT_MAIL: ${MY_EMAIL}
     volumes:
       - mapproxy_config:/srv/mapproxy/config
+      - mapproxy_cache:/srv/mapproxy/cache
     restart: unless-stopped
     networks:
       proxy_net:
@@ -56,9 +57,11 @@ services:
 
 volumes:
   mapproxy_config:
-      name: mapproxy_config
+    name: mapproxy_config
+  mapproxy_cache:
+    name: mapproxy_cache
   db_data:
-     name: mapproxy_couchdb_data
+    name: mapproxy_couchdb_data
 
 networks:
   proxy_net:
