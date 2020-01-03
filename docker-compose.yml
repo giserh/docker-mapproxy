@@ -24,9 +24,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.mapproxy
-    # This will direct logging to the host machine
-    logging:
-      driver: syslog
 
 # We're not going to expose this service on the Internet,
 # so it's on a separate network. 
@@ -51,9 +48,6 @@ services:
     volumes:
       - db_data:/opt/couchdb/data
     restart: unless-stopped
-    # This will direct logging to the host machine
-    logging:
-      driver: syslog
 
 volumes:
   mapproxy_config:
