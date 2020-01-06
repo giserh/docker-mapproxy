@@ -172,7 +172,5 @@ not set correctly on startup??
 TODO: Currently you must manually create databases to hold the tiles.
 Maybe I should automate it?
 
-TODO: Add example using MapProxy without CouchDB.
-
 TODO: Show how to use MapProxy and CouchDB on different servers. (SWARM!)
 
