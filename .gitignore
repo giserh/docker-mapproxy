@@ -1,6 +1,9 @@
 # Emacs backup files
 *~
 
+# ESRI tile packages
+*.tpkx
+
 # Logs
 logs
 *.log
