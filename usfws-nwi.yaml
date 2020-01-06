@@ -1,6 +1,7 @@
 base: ../globals.yaml
 
 layers:
+
   - name: NWI
     title: US FWS National Wetland Inventory
     md:
@@ -8,9 +9,20 @@ layers:
         title: US Fish and Wildlife Service
         url: https://www.fws.gov/wetlands/Data/Web-Map-Services.html
     layers:
-      - name: Wetlands
+      - name: nwi
         title: Wetlands
         sources: [nwi_cache]
+
+  - name: NWI_Metadata
+    title: US FWS National Wetland Inventory (metadata)
+    md:
+      attribution:
+        title: US Fish and Wildlife Service
+        url: https://www.fws.gov/wetlands/Data/Web-Map-Services.html
+    layers:
+      - name: nwi_metadata
+        title: Wetlands Metadata
+        sources: [nwi_metadata_cache]
 
 caches:
   # I'm using PNG images here to get a transparent background
@@ -32,6 +44,23 @@ caches:
         created: '{{utc_iso}}'
         center: '{{wgs_tile_centroid}}'
 
+  nwi_metadata_cache:
+    grids: [county]
+    sources: [nwi_metadata_source]
+    
+    request_format: image/png
+    cache: 
+      type: couchdb
+      url: http://couchdb:5984
+      db_name: usfws_nwi_metadata
+      tile_metadata: 
+        tile_col: '{{x}}'
+        tile_row: '{{y}}'
+        tile_level: '{{z}}'
+        created_ts: '{{timestamp}}'
+        created: '{{utc_iso}}'
+        center: '{{wgs_tile_centroid}}'
+
 sources:
   nwi_source:
     type: wms
@@ -41,6 +70,19 @@ sources:
       transparent: true
     wms_opts:
       version: 1.3.0
+      legendgraphic: true
+      legendurl: file:///srv/mapproxy/nwi_legend.png
+
+# This service has one layer for features and one layer for metadata
+  nwi_metadata_source:
+    type: wms
+    req:
+      url: https://www.fws.gov/wetlands/arcgis/services/Wetlands/MapServer/WMSServer
+      layers: 0
+    wms_opts:
+      version: 1.3.0
+      featureinfo: true
+      map: false
       
 grids:
   county:

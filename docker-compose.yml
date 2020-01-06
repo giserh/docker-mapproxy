@@ -11,6 +11,7 @@ services:
       LETSENCRYPT_MAIL: ${MY_EMAIL}
     volumes:
       - mapproxy_config:/srv/mapproxy/config
+      - mapproxy_cache:/srv/mapproxy/cache
     restart: unless-stopped
     networks:
       proxy_net:
@@ -23,9 +24,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.mapproxy
-    # This will direct logging to the host machine
-    logging:
-      driver: syslog
 
 # We're not going to expose this service on the Internet,
 # so it's on a separate network. 
@@ -50,15 +48,14 @@ services:
     volumes:
       - db_data:/opt/couchdb/data
     restart: unless-stopped
-    # This will direct logging to the host machine
-    logging:
-      driver: syslog
 
 volumes:
   mapproxy_config:
-      name: mapproxy_config
+    name: mapproxy_config
+  mapproxy_cache:
+    name: mapproxy_cache
   db_data:
-     name: mapproxy_couchdb_data
+    name: mapproxy_couchdb_data
 
 networks:
   proxy_net:

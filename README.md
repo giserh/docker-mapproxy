@@ -76,13 +76,15 @@ will start containers for MapProxy and CouchDB.
 
 ### Set up CouchDB
 
-The "up" command will bring up mapproxy and couchdb, but you have to tell couchdb
-that this is a single-node set up so that it will create its system databases.
+The "up" command will bring up mapproxy and couchdb, but the first
+time it starts you will have to tell couchdb that this is a
+single-node set up so that it will create its system databases.
 
-If you never set an admin user and password, MapProxy will create databases on its own,
-but personally I can't bring myself to leave it unconfigured.
+If you never set an admin user and password, MapProxy will create
+databases on its own, but personally I can't bring myself to leave it
+unconfigured, it seems like too much of a security hole to me.
 
-Use Fauxton to see the setup and make adjustments,
+You can use Fauxton to see the setup and make adjustments,
 
     http://localhost:5984/_utils#setup
 
@@ -104,7 +106,18 @@ You can create them anytime and the errors will stop; that is, it won't hurt any
 to start everything running before creating the databases. (There is no reason to start
 the database first, create the databases, and then start MapProxy.)
 
+## Use a tile package from ArcGIS Pro
+
+In Pro, use the geoprocessing tool "Create Map Tile Package". This will create a file
+with a "tpkx" extension.
+
+You have to unzip it (it's just a .zip archive with a different extension.) and then
+copy the files into the volume called mapproxy_cache. Then you have to set up a configuration
+file for it. My sample config file is "bulletin78_79.yaml".
+
 ## How to seed the cache
+
+NOTE, I have not done much testing in this area yet.
 
 Edit the seed.yaml in config to match your requirements. It's set up for the osip2018 example.
 (You need to edit the copy that's in the Docker volume. In my case as root I edit

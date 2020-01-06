@@ -33,10 +33,6 @@ WORKDIR $MAPPROXY_BASE
 COPY start_mapproxy.py .
 COPY log.ini .
 
-# We normally use couch_db to store tiles but this folder is available too.
-# This just creates the cache folder, which we hopefully never use
-RUN mkdir -p $MAPPROXY_BASE/cache_data
-
 WORKDIR $MAPPROXY_BASE/config
 COPY globals.yaml .
 COPY seed.yaml .
@@ -49,7 +45,9 @@ COPY Astoria2004_coverage.geojson .
 COPY county-aerials.yaml .
 COPY lidar.yaml .
 COPY usfws-nwi.yaml .
+
 VOLUME $MAPPROXY_BASE/config
+VOLUME $MAPPROXY_BASE/cache
 
 # Start a waitress WSGI server, set the port as desired.
 # Make sure it matches the VIRTUAL_PORT setting in docker-compose.yml if you use that.
