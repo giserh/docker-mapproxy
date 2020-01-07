@@ -25,18 +25,23 @@ services:
       context: .
       dockerfile: Dockerfile.mapproxy
 
-# We're not going to expose this service on the Internet,
-# so it's on a separate network. 
   db:
     container_name: mapproxy_couchdb
     image: couchdb:latest
     env_file: .env
     environment:
+      VIRTUAL_HOST: ${COUCHDB_VIRTUAL_HOST}
+      VIRTUAL_PORT: 5984
+      LETSENCRYPT_HOST: ${COUCHDB_VIRTUAL_HOST}
+      LETSENCRYPT_MAIL: ${MY_EMAIL}
       NETWORK_ACCESS: internal
       COUCHDATA: /opt/couchdb/data
       COUCHDB_USER: ${DB_USER}
       COUCHDB_SECRET: ${DB_PASSWORD}
     networks:
+      proxy_net:
+        aliases:
+          - couchdb
       database_net:
         aliases:
           # N.B. This name is used in the URLs in the mapproxy configuration files.
@@ -51,11 +56,11 @@ services:
 
 volumes:
   mapproxy_config:
-    name: mapproxy_config
+      name: mapproxy_config
   mapproxy_cache:
-    name: mapproxy_cache
+        name: mapproxy_cache
   db_data:
-    name: mapproxy_couchdb_data
+     name: mapproxy_couchdb_data
 
 networks:
   proxy_net:
