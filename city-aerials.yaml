@@ -2,47 +2,37 @@ base: ../globals.yaml
 
 layers:
   - name: astoria2004
-    title: City of Astoria 2004
+    title: City of Astoria 2004 6"
+    sources: [astoria2004_cache]
     md:
       attribution:
-        title: City of Astoria GIS
-        url: https://gis.astoria.or.us/
-    layers:
-      - name: astoria2004
-        title: Astoria 2004 6"
-        sources: [astoria2004_cache]
+        title: City of Astoria Public Works Engineering
+        url: https://www.astoria.or.us/Engineering.aspx
 
   - name: astoria2010
-    title: City of Astoria 2010
+    title: City of Astoria 2010 6"
+    sources: [astoria2010_cache]
     md:
       attribution:
-        title: City of Astoria GIS
-        url: https://gis.astoria.or.us/
-    layers:
-      - name: astoria2010
-        title: Astoria 2010 6"
-        sources: [astoria2010_cache]
+        title: City of Astoria Public Works Engineering
+        url: https://www.astoria.or.us/Engineering.aspx
 
   - name: astoria2015
-    title: City of Astoria 2015
+    title: City of Astoria 2015 6"
+    sources: [astoria2015_cache]
     md:
       attribution:
-        title: City of Astoria GIS
-        url: https://gis.astoria.or.us/
-    layers:
-      - name: astoria2015
-        title: Astoria 2015 6"
-        sources: [astoria2015_cache]
+        title: City of Astoria Public Works Engineering
+        url: https://www.astoria.or.us/Engineering.aspx
 
-
-# I don't have any URL for this so I need to seed the cache directly from images, until then I'm leaving it out.
-# My thinking is: TIFF images -> GDAL VRT mosaic -> tiles -> mapproxy seed or cdbtiles -> couchdb
-#  - name: warrenton2011
-#    title: City of Warrenton
-#    layers:
-#      - name: warrenton
-#        title: Warrenton 2011 6"
-#        sources: [warrenton2011_cache]
+# I don't have any URL for this so I use a tile package that I generate in ArcGIS Pro (K:/Aerials/Aerials_project)
+  - name: warrenton2011
+    title: City of Warrenton 2011 6"
+    sources: [warrenton2011_cache]
+    md:
+      attribution:
+        title: City of Warrenton Public Works
+        url: https://www.ci.warrenton.or.us/gis
 
 caches:
   # I'm using PNG images here to get a transparent background
@@ -98,22 +88,21 @@ caches:
         created: '{{utc_iso}}'
         center: '{{wgs_tile_centroid}}'
 
+# There is no source for this cache, because we're using a tile
+# package generated in ArcGIS Pro.  That's also why it has to be set
+# to use the global grid.
+
   warrenton2011_cache:
-    grids: [warrenton]
-    sources: [warrenton2011_source]
-    format: image/jpeg
-    request_format: image/jpeg
-    cache: 
-      type: couchdb
-      url: http://couchdb:5984
-      db_name: warrenton2011
-      tile_metadata: 
-        tile_col: '{{x}}'
-        tile_row: '{{y}}'
-        tile_level: '{{z}}'
-        created_ts: '{{timestamp}}'
-        created: '{{utc_iso}}'
-        center: '{{wgs_tile_centroid}}'
+    sources: []
+    grids: [GLOBAL_WEBMERCATOR]
+    cache:
+      type: compact
+      version: 2
+      # The tpkx file unpacks to "tile/" so for example,
+      # to unpack a file astoria_quad.tpkx into */cache/astoria
+      #   docker run --rm -v ${PWD}/warrenton2011_aerial_quad.tpkx:/tmp/package.zip -v mapproxy_cache:/cache -w /cache/warrenton2011_aerial busybox unzip /tmp/package.zip
+      directory: /srv/mapproxy/cache/warrenton2011_aerial/tile
+
             
 sources:
   astoria2015_source:
@@ -157,13 +146,6 @@ sources:
       clip: true
 # https://gis.astoria.or.us/cgi-bin/mapserv.exe?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&FORMAT=image%2Fpng%3Bbits%3D8&TRANSPARENT=true&LAYERS=aerials2004&MAP=%2Fms4w%2Fapps%2Fastoria31_Public%2Fhtdocs%2Fastoria31%2Fmaps%2F.%2Fastoria_aerial_hires_2004.map&SRS=EPSG%3A3857&STYLES=&MAP_RESOLUTION=112.5&WIDTH=1333&HEIGHT=1026&BBOX=-13786760.476540796%2C5809172.109307839%2C-13784213.212573193%2C5811132.719083354
 
-  warrenton2011_source:
-    type: wms
-    req:
-      url: https://gis.astoria.or.us/cgi-bin/mapserv.exe?VERSION=1.1.1&MAP=%2Fms4w%2Fapps%2Fastoria31_Public%2Fhtdocs%2Fastoria31%2Fmaps%2F.%2Fair_2015.map&SRS=EPSG%3A3857
-      layers: air_2015
-      transparent: true
-      
 grids:
   astoria:
     base: GLOBAL_WEBMERCATOR
