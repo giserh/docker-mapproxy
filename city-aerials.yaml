@@ -99,8 +99,7 @@ caches:
       type: compact
       version: 2
       # The tpkx file unpacks to "tile/" so for example,
-      # to unpack a file astoria_quad.tpkx into */cache/astoria
-      #   docker run --rm -v ${PWD}/warrenton2011_aerial_quad.tpkx:/tmp/package.zip -v mapproxy_cache:/cache -w /cache/warrenton2011_aerial busybox unzip /tmp/package.zip
+      #   docker run --rm -v ${PWD}/warrenton2011_aerial.tpkx:/tmp/package.zip -v mapproxy_cache:/cache -w /cache/warrenton2011_aerial busybox unzip /tmp/package.zip
       directory: /srv/mapproxy/cache/warrenton2011_aerial/tile
 
             
