@@ -44,6 +44,7 @@ COPY Astoria2010_coverage.geojson .
 COPY Astoria2004_coverage.geojson .
 COPY county-aerials.yaml .
 COPY lidar.yaml .
+COPY planning-ocmp.yaml .
 COPY usfws-nwi.yaml .
 
 VOLUME $MAPPROXY_BASE/config
