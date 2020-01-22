@@ -1,0 +1,106 @@
+base: ../globals.yaml
+
+layers:
+  - name: ocmp_diking_drainage_districts
+    title: OCMP Diking Drainage Districts
+    sources: [ocmp_diking_drainage_districts_cache]
+    md:
+      attribution:
+        title: Oregon Coastal Management Program
+        url: https://www.oregon.gov/LCD/OCMP/pages/index.aspx
+
+  - name: ocmp_dikes_levees
+    title: OCMP Dikes and Levees
+    sources: [ocmp_dikes_levees_cache]
+    md:
+      attribution:
+        title: Oregon Coastal Management Program
+        url: https://www.oregon.gov/LCD/OCMP/pages/index.aspx
+
+  - name: ocmp_coastal_access
+    title: OCMP Coastal Access
+    sources: [ocmp_coastal_access_cache]
+    md:
+      attribution:
+        title: Oregon Coastal Management Program
+        url: https://www.oregon.gov/LCD/OCMP/pages/index.aspx
+
+caches:
+  # I'm using PNG images here to get a transparent background
+
+
+  ocmp_diking_drainage_districts_cache:
+    grids: [county]
+    sources: [ocmp_diking_drainage_districts_source]
+    format: image/png
+    request_format: image/png
+    cache: 
+      type: couchdb
+      url: http://couchdb:5984
+      db_name: ocmp_diking_drainage
+      tile_metadata: 
+        tile_col: '{{x}}'
+        tile_row: '{{y}}'
+        tile_level: '{{z}}'
+        created_ts: '{{timestamp}}'
+        created: '{{utc_iso}}'
+        center: '{{wgs_tile_centroid}}'
+
+  ocmp_dikes_levees_cache:
+    grids: [county]
+    sources: [ocmp_dikes_levees_source]
+    format: image/png
+    request_format: image/png
+    cache: 
+      type: couchdb
+      url: http://couchdb:5984
+      db_name: ocmp_dikes_levees
+      tile_metadata: 
+        tile_col: '{{x}}'
+        tile_row: '{{y}}'
+        tile_level: '{{z}}'
+        created_ts: '{{timestamp}}'
+        created: '{{utc_iso}}'
+        center: '{{wgs_tile_centroid}}'
+
+  ocmp_coastal_access_cache:
+    grids: [county]
+    sources: [ocmp_coastal_access_source]
+    format: image/png
+    request_format: image/png
+    cache: 
+      type: couchdb
+      url: http://couchdb:5984
+      db_name: ocmp_coastal_access
+      tile_metadata: 
+        tile_col: '{{x}}'
+        tile_row: '{{y}}'
+        tile_level: '{{z}}'
+        created_ts: '{{timestamp}}'
+        created: '{{utc_iso}}'
+        center: '{{wgs_tile_centroid}}'
+
+sources:
+  ocmp_diking_drainage_districts_source:
+    type: arcgis
+    req:
+      url: https://maps.oda.state.or.us/arcgis/rest/services/Projects/OCMP_Fellowship2011_Diking_Drainage_Districts_Mattison/MapServer
+      transparent: true
+
+  ocmp_dikes_levees_source:
+    type: arcgis
+    req:
+      url: https://maps.oda.state.or.us/arcgis/rest/services/Projects/OCMP_Fellowship2011_Dikes_Levees_Mattison/MapServer
+      transparent: true
+
+  ocmp_coastal_access_source:
+    type: arcgis
+    req:
+      url: https://maps.oda.state.or.us/arcgis/rest/services/Projects/OCMP_CoastalAccess/MapServer
+      transparent: true
+
+grids:
+  county:
+    base: GLOBAL_WEBMERCATOR
+    bbox: [-124.1,45.77,-123.35,46.3] # Clatsop county
+    bbox_srs: EPSG:4326
