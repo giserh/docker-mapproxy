@@ -1,4 +1,4 @@
-#!env bash
+#!/bin/bash
 #
 # Read the database names from all the YAML files here,
 # find database names, and create CouchDB databases for them.
