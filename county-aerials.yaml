@@ -207,7 +207,7 @@ sources:
   naip2005_source:
     type: arcgis
     req:
-      url: http://imagery.oregonexplorer.info/arcgis/rest/services/NAIP_2009/NAIP_2005_WM/ImageServer
+      url: http://imagery.oregonexplorer.info/arcgis/rest/services/NAIP_2005/NAIP_2005_WM/ImageServer
 # /tile/%(z)s/%(y)s/%(x)s
 #    grid: county
 
