@@ -34,6 +34,15 @@ layers:
         title: City of Warrenton Public Works
         url: https://www.ci.warrenton.or.us/gis
 
+# I don't have any URL for this so I use a tile package that I generate in ArcGIS Pro (K:/Aerials/Aerials_project)
+  - name: gearhart2009
+    title: City of Gearhart 2009 6"
+    sources: [gearhart2009_cache]
+    md:
+      attribution:
+        title: City of Gearhart
+        url: https://www.cityofgearhart.com/general/page/city-planning-public-works
+
 caches:
   # I'm using PNG images here to get a transparent background
 
@@ -92,14 +101,36 @@ caches:
 # package generated in ArcGIS Pro.  That's also why it has to be set
 # to use the global grid.
 
+  gearhart2009_cache:
+    sources: []
+    grids: [GLOBAL_WEBMERCATOR]
+    cache:
+      type: compact
+      version: 2
+      # The tpkx file unpacks to "tile/" so for example, do something vaguely like this:
+      #   cd /var/lib/docker/volumes/mapproxy_cache/_data/gearhart2009_aerial
+      #    && unzip gearhart2009_aerial.tpkx.zip
+      # ** I think the busybox unzip might have problems with big (>2GB) files!
+      #  so you could also try the "docker run" thing but use debian instead. To wit:
+      #   docker run --rm -v ${PWD}/gearhart_2009_aerial.tpkx:/tmp/package.zip -v mapproxy_cache:/cache -w /cache/gearhart2009_aerial debian unzip /tmp/package.zip
+      directory: /srv/mapproxy/cache/gearhart2009_aerial/tile
+
+# There is no source for this cache, because we're using a tile
+# package generated in ArcGIS Pro.  That's also why it has to be set
+# to use the global grid.
+
   warrenton2011_cache:
     sources: []
     grids: [GLOBAL_WEBMERCATOR]
     cache:
       type: compact
       version: 2
-      # The tpkx file unpacks to "tile/" so for example,
-      #   docker run --rm -v ${PWD}/warrenton2011_aerial.tpkx:/tmp/package.zip -v mapproxy_cache:/cache -w /cache/warrenton2011_aerial busybox unzip /tmp/package.zip
+      # The tpkx file unpacks to "tile/" so for example, do something vaguely like this:
+      #   cd /var/lib/docker/volumes/mapproxy_cache/_data/warrenton2011_aerial
+      #    && unzip warrenton_2011_aerial.tpkx.zip
+      # ** I think the busybox unzip might have problems with big (>2GB) files!
+      #  so you could also try the "docker run" thing but use debian instead. To wit:
+      #   docker run --rm -v ${PWD}/warrenton_2011_aerial.tpkx:/tmp/package.zip -v mapproxy_cache:/cache -w /cache/warrenton2011_aerial debian unzip /tmp/package.zip
       directory: /srv/mapproxy/cache/warrenton2011_aerial/tile
 
             
