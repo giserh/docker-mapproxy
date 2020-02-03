@@ -1,0 +1,40 @@
+base: ../globals.yaml
+
+layers:
+  - name: naip_conus_prime
+    title: NAIP CONUS Prime
+    sources: [naip_conus_cache]
+    md:
+      attribution:
+        title: USDA NAIP imagery program
+
+caches:
+  naip_conus_cache:
+    grids: [conus]
+    sources: [naip_conus_source]
+    format: image/jpeg
+    request_format: image/jpeg
+    cache:
+      type: couchdb
+      db_name: naip_conus_prime
+      url: http://couchdb:5984
+      tile_metadata: 
+        tile_col: '{{x}}'
+        tile_row: '{{y}}'
+        tile_level: '{{z}}'
+        created_ts: '{{timestamp}}'
+        created: '{{utc_iso}}'
+        center: '{{wgs_tile_centroid}}'
+            
+sources:
+  naip_conus_source:
+    type: arcgis
+    req:
+      url: https://gis.apfo.usda.gov/arcgis/rest/services/NAIP/USDA_CONUS_PRIME/ImageServer
+
+grids:
+  conus:
+    base: GLOBAL_WEBMERCATOR
+#    bbox: [-124.1,45.77,-123.35,46.3] # Clatsop county
+    bbox_srs: EPSG:4326
+
