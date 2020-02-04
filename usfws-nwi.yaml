@@ -1,7 +1,6 @@
 base: ../globals.yaml
 
 layers:
-x
   - name: NWI
     title: US FWS National Wetland Inventory
     md:
