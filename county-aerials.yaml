@@ -1,10 +1,6 @@
 base: ../globals.yaml
 
 layers:
-
-# 1995, 2000, 2009
-# Not working for some reason, tried WMS, WMTS, and State Lambert, they only work in ArcMap!
-#
   - name: naip1995
     title: NAIP 1995 1m B&W DOQ
     sources: [naip1995_cache]
@@ -201,29 +197,21 @@ sources:
     type: arcgis
     req:
       url: http://imagery.oregonexplorer.info/arcgis/rest/services/NAIP_2009/NAIP_2009_WM/ImageServer
-# /tile/%(z)s/%(y)s/%(x)s
-#    grid: county
 
   naip2005_source:
     type: arcgis
     req:
       url: http://imagery.oregonexplorer.info/arcgis/rest/services/NAIP_2005/NAIP_2005_WM/ImageServer
-# /tile/%(z)s/%(y)s/%(x)s
-#    grid: county
 
   naip2000_source:
     type: arcgis
     req:
       url: http://imagery.oregonexplorer.info/arcgis/rest/services/NAIP_2000/NAIP_2000_WM/ImageServer
-# /tile/%(z)s/%(y)s/%(x)s
-#    grid: county
 
   naip1995_source:
     type: arcgis
     req:
       url: http://imagery.oregonexplorer.info/arcgis/rest/services/NAIP_1995/NAIP_1995_WM/ImageServer
-# /tile/%(z)s/%(y)s/%(x)s
-#    grid: county
 
 grids:
   county:
