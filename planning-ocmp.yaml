@@ -3,7 +3,10 @@ base: ../globals.yaml
 layers:
   - name: ocmp_diking_drainage_districts
     title: OCMP Diking Drainage Districts
-    sources: [ocmp_diking_drainage_districts_cache]
+    layers:
+      - name: ocmp_diking_drainage_districts
+        title: OCMP Diking Drainage Districts
+        sources: [ocmp_diking_drainage_districts_cache]
     md:
       attribution:
         title: Oregon Coastal Management Program
@@ -11,7 +14,10 @@ layers:
 
   - name: ocmp_dikes_levees
     title: OCMP Dikes and Levees
-    sources: [ocmp_dikes_levees_cache]
+    layers:
+      - name: ocmp_dikes_levees
+        title: OCMP Dikes and Levees
+        sources: [ocmp_dikes_levees_cache]
     md:
       attribution:
         title: Oregon Coastal Management Program
@@ -19,7 +25,10 @@ layers:
 
   - name: ocmp_coastal_access
     title: OCMP Coastal Access
-    sources: [ocmp_coastal_access_cache]
+    layers:
+      - name: ocmp_coastal_access
+        title: OCMP Coastal Access
+        sources: [ocmp_coastal_access_cache]
     md:
       attribution:
         title: Oregon Coastal Management Program

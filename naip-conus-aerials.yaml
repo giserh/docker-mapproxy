@@ -3,7 +3,10 @@ base: ../globals.yaml
 layers:
   - name: naip_conus_prime
     title: NAIP CONUS Prime
-    sources: [naip_conus_cache]
+    layers:
+      - name: naip_conus_prime
+        title: NAIP CONUS Prime
+        sources: [naip_conus_cache]
     md:
       attribution:
         title: USDA NAIP imagery program

@@ -2,16 +2,22 @@ base: ../globals.yaml
 
 layers:
   - name: naip1995
-    title: NAIP 1995 1m B&W DOQ
-    sources: [naip1995_cache]
+    title: NAIP 1995 1m BW DOQ
+    layers:
+      - name: naip1995
+        title: NAIP 1995 1m BW DOQ
+        sources: [naip1995_cache]
     md:
       attribution:
         title: Oregon Explorer Natural Resources Digital Library
         url: https://oregonexplorer.info/
 
   - name: naip2000
-    title: NAIP 2000 1m B&W DOQ
-    sources: [naip2000_cache]
+    title: NAIP 2000 1m BW DOQ
+    layers:
+      - name: naip2000
+        title: NAIP 2000 1m BW DOQ
+        sources: [naip2000_cache]
     md:
       attribution:
         title: Oregon Explorer Natural Resources Digital Library
@@ -19,7 +25,10 @@ layers:
 
   - name: naip2005
     title: NAIP 2005 1/2m 3-band Color
-    sources: [naip2005_cache]
+    layers:
+      - name: naip2005
+        title: NAIP 2005 1/2m 3-band Color
+        sources: [naip2005_cache]
     md:
       attribution:
         title: Oregon Explorer Natural Resources Digital Library
@@ -27,7 +36,10 @@ layers:
 
   - name: naip2009
     title: NAIP 2009 1/2m 4-band
-    sources: [naip2009_cache]
+    layers:
+      - name: naip2009
+        title: NAIP 2009 1/2m 4-band
+        sources: [naip2009_cache]
     md:
       attribution:
         title: Oregon Explorer Natural Resources Digital Library
@@ -35,7 +47,10 @@ layers:
 
   - name: naip2014
     title: NAIP 2014 1m 4-band
-    sources: [naip2014_cache]
+    layers:
+      - name: naip2014
+        title: NAIP 2014 1m 4-band
+        sources: [naip2014_cache]
     md:
       attribution:
         title: Oregon Explorer Natural Resources Digital Library
@@ -43,15 +58,21 @@ layers:
 
   - name: naip2016
     title: NAIP 2016 1m 4-band
-    sources: [naip2016_cache]
+    layers:
+      - name: naip2016
+        title: NAIP 2016 1m 4-band
+        sources: [naip2016_cache]
     md:
       attribution:
         title: Oregon Explorer Natural Resources Digital Library
         url: https://oregonexplorer.info/
 
   - name: osip2018
-    title: OSIP 2018 1'
-    sources: [osip2018_cache]
+    title: OSIP 2018 1 foot
+    layers:
+      - name: osip18
+        title: OSIP 2018 1 foot
+        sources: [osip2018_cache]
     md:
       attribution:
         title: Oregon Explorer Natural Resources Digital Library

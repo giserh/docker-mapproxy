@@ -3,7 +3,10 @@ base: ../globals.yaml
 layers:
   - name: astoria2004
     title: City of Astoria 2004 6"
-    sources: [astoria2004_cache]
+    layers:
+      - name: astoria2004
+        title: City of Astoria 2004 6"
+        sources: [astoria2004_cache]
     md:
       attribution:
         title: City of Astoria Public Works Engineering
@@ -11,7 +14,10 @@ layers:
 
   - name: astoria2010
     title: City of Astoria 2010 6"
-    sources: [astoria2010_cache]
+    layers:
+      - name: astoria2010
+        title: City of Astoria 2010 6"
+        sources: [astoria2010_cache]
     md:
       attribution:
         title: City of Astoria Public Works Engineering
@@ -19,7 +25,10 @@ layers:
 
   - name: astoria2015
     title: City of Astoria 2015 6"
-    sources: [astoria2015_cache]
+    layers:
+      - name: astoria2015
+        title: City of Astoria 2015 6"
+        sources: [astoria2015_cache]
     md:
       attribution:
         title: City of Astoria Public Works Engineering
@@ -28,7 +37,10 @@ layers:
 # I don't have any URL for this so I use a tile package that I generate in ArcGIS Pro (K:/Aerials/Aerials_project)
   - name: warrenton2011
     title: City of Warrenton 2011 6"
-    sources: [warrenton2011_cache]
+    layers:
+      - name: warrenton2011
+        title: City of Warrenton 2011 6"
+        sources: [warrenton2011_cache]
     md:
       attribution:
         title: City of Warrenton Public Works
@@ -37,7 +49,10 @@ layers:
 # I don't have any URL for this so I use a tile package that I generate in ArcGIS Pro (K:/Aerials/Aerials_project)
   - name: gearhart2009
     title: City of Gearhart 2009 6"
-    sources: [gearhart2009_cache]
+    layers:
+      - name: gearhart2009
+        title: City of Gearhart 2009 6"
+        sources: [gearhart2009_cache]
     md:
       attribution:
         title: City of Gearhart
