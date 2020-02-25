@@ -1,5 +1,12 @@
 base: ../globals.yaml
 
+services:
+  demo:
+  wms:
+    md:
+      title: DOGAMI bulletins 78/79
+      abstract: Scanned and georeferenced geologic maps for Clatsop County
+
 layers:
   - name: cathlamet_quad
     title: Cathlamet Quad

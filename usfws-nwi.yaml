@@ -1,5 +1,12 @@
 base: ../globals.yaml
 
+services:
+  demo:
+  wms:
+    md:
+      title: USFWS National Wetland Inventory
+      abstract: Proxy of USFWS NWI services
+
 layers:
   - name: NWI
     title: US FWS National Wetland Inventory

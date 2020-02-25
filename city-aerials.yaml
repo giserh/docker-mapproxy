@@ -1,5 +1,12 @@
 base: ../globals.yaml
 
+services:
+  demo:
+  wms:
+    md:
+      title: City aerial photos
+      abstract: Aerial imagery from various Clatsop County cities
+
 layers:
   - name: astoria2004
     title: City of Astoria 2004 6"

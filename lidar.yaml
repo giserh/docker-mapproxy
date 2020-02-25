@@ -1,5 +1,12 @@
 base: ../globals.yaml
 
+services:
+  demo:
+  wms:
+    md:
+      title: LiDAR from DOGAMI (old version)
+      abstract: Proxy of DOGAMI LiDAR services
+
 layers:
   - name: dogamihh
     title:  Highest Hit Hillshade

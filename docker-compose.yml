@@ -30,10 +30,10 @@ services:
     image: couchdb:latest
     env_file: .env
     environment:
-      VIRTUAL_HOST: ${COUCHDB_VIRTUAL_HOST}
-      VIRTUAL_PORT: 5984
-      LETSENCRYPT_HOST: ${COUCHDB_VIRTUAL_HOST}
-      LETSENCRYPT_MAIL: ${MY_EMAIL}
+#      VIRTUAL_HOST: ${COUCHDB_VIRTUAL_HOST}
+#      VIRTUAL_PORT: 5984
+#      LETSENCRYPT_HOST: ${COUCHDB_VIRTUAL_HOST}
+#      LETSENCRYPT_MAIL: ${MY_EMAIL}
       NETWORK_ACCESS: internal
       COUCHDATA: /opt/couchdb/data
       COUCHDB_USER: ${DB_USER}

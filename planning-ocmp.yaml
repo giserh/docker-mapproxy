@@ -1,5 +1,12 @@
 base: ../globals.yaml
 
+services:
+  demo:
+  wms:
+    md:
+      title: Oregon Coastal Management Program
+      abstract: Proxy of OCMP services
+
 layers:
   - name: ocmp_diking_drainage_districts
     title: OCMP Diking Drainage Districts

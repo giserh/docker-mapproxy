@@ -1,5 +1,12 @@
 base: ../globals.yaml
 
+services:
+  demo:
+  wms:
+    md:
+      title: USDA NAIP imagery
+      abstract: Proxy of NAIP imagery services
+
 layers:
   - name: naip_conus_prime
     title: NAIP CONUS Prime
