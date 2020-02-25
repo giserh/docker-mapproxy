@@ -18,6 +18,17 @@ services:
         aliases:
           - mapproxy
       database_net:
+
+    # LISTENING on PORT 80 DID NOT WORK. ArcGIS Portal SUCKS.
+    # It ALWAYS redirects to port 443, so you HAVE TO listen there.
+    # Then SOMETIMES it gives errors and refuses to let you create new connections.
+    # The error is  "'https://giscache.co.clatsop.or.us/county-aerials/service?SERVICE=WMS&amp;REQUEST=GetCapabilities'
+    #     is not accessible: Error. PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException:
+    #     unable to find valid certification path to requested target."
+    #
+    # The ONLY workaround I have found when it's acting up is to use AGO-Assistant
+    # to manually copy an existing service and then edit it.
+    
     expose:
       - "8080"
     image: wildsong/mapproxy:latest
