@@ -1,0 +1,117 @@
+base: ../globals.yaml
+
+services:
+  demo:
+  wms:
+    md:
+      title: Oregon State Imagery Program
+      abstract: Proxy of Oregon State imagery services
+
+layers:
+  - name: naip2014
+    title: NAIP 2014 1m 4-band
+    layers:
+      - name: naip2014
+        title: NAIP 2014 1m 4-band
+        sources: [naip2014_cache]
+    md:
+      attribution:
+        title: Oregon Explorer Natural Resources Digital Library
+        url: https://oregonexplorer.info/
+
+  - name: naip2016
+    title: NAIP 2016 1m 4-band
+    layers:
+      - name: naip2016
+        title: NAIP 2016 1m 4-band
+        sources: [naip2016_cache]
+    md:
+      attribution:
+        title: Oregon Explorer Natural Resources Digital Library
+        url: https://oregonexplorer.info/
+
+  - name: osip2018
+    title: OSIP 2018 1 foot
+    layers:
+      - name: osip2018
+        title: OSIP 2018 1 foot
+        sources: [osip2018_cache]
+    md:
+      attribution:
+        title: Oregon Explorer Natural Resources Digital Library
+        url: https://oregonexplorer.info/
+
+caches:
+  osip2018_cache:
+    grids: [county]
+    sources: [osip2018_source]
+    format: image/jpeg
+    request_format: image/jpeg
+    cache:
+      type: couchdb
+      db_name: osip2018
+      url: http://couchdb:5984
+      tile_metadata: 
+        tile_col: '{{x}}'
+        tile_row: '{{y}}'
+        tile_level: '{{z}}'
+        created_ts: '{{timestamp}}'
+        created: '{{utc_iso}}'
+        center: '{{wgs_tile_centroid}}'
+            
+  naip2016_cache:
+    grids: [county]
+    sources: [naip2016_source]
+    format: image/jpeg
+    request_format: image/jpeg
+    cache:
+      type: couchdb
+      db_name: naip2016
+      url: http://couchdb:5984
+      tile_metadata: 
+        tile_col: '{{x}}'
+        tile_row: '{{y}}'
+        tile_level: '{{z}}'
+        created_ts: '{{timestamp}}'
+        created: '{{utc_iso}}'
+        center: '{{wgs_tile_centroid}}'
+            
+  naip2014_cache:
+    grids: [county]
+    sources: [naip2014_source]
+    format: image/jpeg
+    request_format: image/jpeg
+    cache:
+      type: couchdb
+      db_name: naip2014
+      url: http://couchdb:5984
+      tile_metadata: 
+        tile_col: '{{x}}'
+        tile_row: '{{y}}'
+        tile_level: '{{z}}'
+        created_ts: '{{timestamp}}'
+        created: '{{utc_iso}}'
+        center: '{{wgs_tile_centroid}}'
+            
+sources:
+  osip2018_source:
+    type: arcgis
+    req:
+      url: http://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2018/OSIP_2018_WM/ImageServer
+
+  naip2016_source:
+    type: arcgis
+    req:
+      url: http://imagery.oregonexplorer.info/arcgis/rest/services/NAIP_2016/NAIP_2016_WM/ImageServer
+
+  naip2014_source:
+    type: arcgis
+    req:
+      url: http://imagery.oregonexplorer.info/arcgis/rest/services/NAIP_2014/NAIP_2014_WM/ImageServer
+
+grids:
+  county:
+    base: GLOBAL_WEBMERCATOR
+    bbox: [-124.1,45.77,-123.35,46.3] # Clatsop county
+    bbox_srs: EPSG:4326
+
