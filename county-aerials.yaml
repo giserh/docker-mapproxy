@@ -1,82 +1,55 @@
 base: ../globals.yaml
 
+services:
+  demo:
+  wms:
+    md:
+    # You will see this title in ArcGIS Online AND in ArcGIS Pro.
+      title: County-wide aerial photos
+      abstract: Proxy of Oregon State imagery services
+
 layers:
-  - name: naip1995
-    title: NAIP 1995 1m BW DOQ
+  - name: county_aerials
+    # You will see this title and grouping ONLY in ArcGIS Pro.
+    title: County aerial photos
+    md:
+      attribution:
+        title: Oregon Explorer Natural Resources Digital Library
+        url: https://oregonexplorer.info/
+
+    # You can put all the layers in one group like this, underneath "county_aerials"
+    # or you can put in a separate top level "layers" entry for each photo.
+    # The results are the same in ArcGIS Online but grouping them this way
+    # looks better in ArcGIS Pro, there are not as many levels of "folders" to deal with.
+    
     layers:
       - name: naip1995
         title: NAIP 1995 1m BW DOQ
         sources: [naip1995_cache]
-    md:
-      attribution:
-        title: Oregon Explorer Natural Resources Digital Library
-        url: https://oregonexplorer.info/
 
-  - name: naip2000
-    title: NAIP 2000 1m BW DOQ
-    layers:
       - name: naip2000
         title: NAIP 2000 1m BW DOQ
         sources: [naip2000_cache]
-    md:
-      attribution:
-        title: Oregon Explorer Natural Resources Digital Library
-        url: https://oregonexplorer.info/
 
-  - name: naip2005
-    title: NAIP 2005 1/2m 3-band Color
-    layers:
       - name: naip2005
         title: NAIP 2005 1/2m 3-band Color
         sources: [naip2005_cache]
-    md:
-      attribution:
-        title: Oregon Explorer Natural Resources Digital Library
-        url: https://oregonexplorer.info/
 
-  - name: naip2009
-    title: NAIP 2009 1/2m 4-band
-    layers:
       - name: naip2009
         title: NAIP 2009 1/2m 4-band
         sources: [naip2009_cache]
-    md:
-      attribution:
-        title: Oregon Explorer Natural Resources Digital Library
-        url: https://oregonexplorer.info/
 
-  - name: naip2014
-    title: NAIP 2014 1m 4-band
-    layers:
       - name: naip2014
         title: NAIP 2014 1m 4-band
         sources: [naip2014_cache]
-    md:
-      attribution:
-        title: Oregon Explorer Natural Resources Digital Library
-        url: https://oregonexplorer.info/
 
-  - name: naip2016
-    title: NAIP 2016 1m 4-band
-    layers:
       - name: naip2016
         title: NAIP 2016 1m 4-band
         sources: [naip2016_cache]
-    md:
-      attribution:
-        title: Oregon Explorer Natural Resources Digital Library
-        url: https://oregonexplorer.info/
 
-  - name: osip2018
-    title: OSIP 2018 1 foot
-    layers:
-      - name: osip18
+      - name: osip2018
         title: OSIP 2018 1 foot
         sources: [osip2018_cache]
-    md:
-      attribution:
-        title: Oregon Explorer Natural Resources Digital Library
-        url: https://oregonexplorer.info/
 
 caches:
   osip2018_cache:
