@@ -128,14 +128,14 @@ caches:
         center: '{{wgs_tile_centroid}}'
            
 sources:
-  canopy_hs_source:
-    type: arcgis
-    opts:
-      featureinfo: false
-      map: true
-    req:
-      url: https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/CANOPY_HEIGHT_MODEL_MOSAIC_HS/ImageServer
-      transparent: true
+#  canopy_hs_source:
+#    type: arcgis
+#    opts:
+#      featureinfo: false
+#      map: true
+#    req:
+#      url: https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/CANOPY_HEIGHT_MODEL_MOSAIC_HS/ImageServer
+#      transparent: true
 
   dsm_hs_source:
     type: arcgis
