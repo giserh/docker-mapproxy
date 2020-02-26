@@ -1,10 +1,14 @@
 base: ../globals.yaml
 
+# This service has only the hillshades
+# because I have not figured out the issues
+# with queries and popups.
+
 services:
   demo:
   wms:
     md:
-      title: Elevations from DOGAMI LiDAR
+      title: Hillshades from DOGAMI LiDAR
       abstract: Proxy of DOGAMI LiDAR services
 
 layers:
@@ -18,9 +22,6 @@ layers:
       - name: digital_terrain_model_layer_hs
         title: Hillshade (bare earth)
         sources: [dtm_hs_cache]
-      - name: digital_terrain_model_layer
-        title: Elevation above sea level
-        sources: [dtm_cache]
 
   # I'd like to change the colors on this one.
   - name: digital_terrain_slope_model
@@ -31,7 +32,7 @@ layers:
         url: https://dogami.oregon.gov
     layers:
       - name: digital_terrain_slope_model_layer
-        title: Slope in degrees
+        title: Slope (in degrees)
         sources: [dtm_slope_cache]
 
   - name: digital_surface_model_hs
@@ -44,58 +45,36 @@ layers:
       - name: digital_surface_model_layer_hs
         title: Highest Hit Hillshade
         sources: [dsm_hs_cache]
-      - name: digital_surface_model_layer
-        title: Highest Hit Elevation
-        sources: [dsm_cache]
 
-  - name: canopy
-    title: Canopy service
-    md:
-      attribution:
-        title: Oregon Department of Geology and Mineral Industries
-        url: https://dogami.oregon.gov
-    layers:
-      - name: canopy_hs_layer
-        title: Canopy Hillshade
-        sources: [canopy_hs_cache]
-      - name: canopy_layer
-        title: Height
-        sources: [canopy_cache]
+# Without the height feature there is not much point in including this service.
+#  - name: canopy
+#    title: Canopy service
+#    md:
+#      attribution:
+#        title: Oregon Department of Geology and Mineral Industries
+#        url: https://dogami.oregon.gov
+#    layers:
+#      - name: canopy_hs_layer
+#        title: Canopy Hillshade
+#        sources: [canopy_hs_cache]
 
 caches:
-  canopy_hs_cache:
-    grids: [county]
-    sources: [canopy_hs_source]
-    format: image/jpeg
-    request_format: image/jpeg
-    cache: 
-      type: couchdb
-      url: http://couchdb:5984
-      db_name: lidar_canopy_hs
-      tile_metadata: 
-        tile_col: '{{x}}'
-        tile_row: '{{y}}'
-        tile_level: '{{z}}'
-        created_ts: '{{timestamp}}'
-        created: '{{utc_iso}}'
-        center: '{{wgs_tile_centroid}}'
-           
-  canopy_cache:
-    grids: [county]
-    sources: [canopy_source]
-    format: image/jpeg
-    request_format: image/jpeg
-    cache: 
-      type: couchdb
-      url: http://couchdb:5984
-      db_name: lidar_canopy
-      tile_metadata: 
-        tile_col: '{{x}}'
-        tile_row: '{{y}}'
-        tile_level: '{{z}}'
-        created_ts: '{{timestamp}}'
-        created: '{{utc_iso}}'
-        center: '{{wgs_tile_centroid}}'
+#  canopy_hs_cache:
+#    grids: [county]
+#    sources: [canopy_hs_source]
+#    format: image/jpeg
+#    request_format: image/jpeg
+#    cache: 
+#      type: couchdb
+#      url: http://couchdb:5984
+#      db_name: lidar_canopy_hs
+#      tile_metadata: 
+#        tile_col: '{{x}}'
+#        tile_row: '{{y}}'
+#        tile_level: '{{z}}'
+#        created_ts: '{{timestamp}}'
+#        created: '{{utc_iso}}'
+#        center: '{{wgs_tile_centroid}}'
            
   dsm_hs_cache:
     grids: [county]
@@ -114,23 +93,6 @@ caches:
         created: '{{utc_iso}}'
         center: '{{wgs_tile_centroid}}'
            
-  dsm_cache:
-    grids: [county]
-    sources: [dsm_source]
-    format: image/jpeg
-    request_format: image/jpeg
-    cache: 
-      type: couchdb
-      url: http://couchdb:5984
-      db_name: lidar_dsm
-      tile_metadata: 
-        tile_col: '{{x}}'
-        tile_row: '{{y}}'
-        tile_level: '{{z}}'
-        created_ts: '{{timestamp}}'
-        created: '{{utc_iso}}'
-        center: '{{wgs_tile_centroid}}'
-           
   dtm_hs_cache:
     grids: [county]
     sources: [dtm_hs_source]
@@ -140,23 +102,6 @@ caches:
       type: couchdb
       url: http://couchdb:5984
       db_name: lidar_dtm_hs
-      tile_metadata: 
-        tile_col: '{{x}}'
-        tile_row: '{{y}}'
-        tile_level: '{{z}}'
-        created_ts: '{{timestamp}}'
-        created: '{{utc_iso}}'
-        center: '{{wgs_tile_centroid}}'
-           
-  dtm_cache:
-    grids: [county]
-    sources: [dtm_source]
-    format: image/jpeg
-    request_format: image/jpeg
-    cache: 
-      type: couchdb
-      url: http://couchdb:5984
-      db_name: lidar_dtm
       tile_metadata: 
         tile_col: '{{x}}'
         tile_row: '{{y}}'
@@ -192,15 +137,6 @@ sources:
       url: https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/CANOPY_HEIGHT_MODEL_MOSAIC_HS/ImageServer
       transparent: true
 
-  canopy_source:
-    type: arcgis
-    opts:
-      featureinfo: true
-      map: false # We only use this source for elevations, not display
-    req:
-      url: https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/CANOPY_HEIGHT_MODEL_MOSAIC/ImageServer
-#      transparent: true
-
   dsm_hs_source:
     type: arcgis
     opts:
@@ -209,15 +145,6 @@ sources:
     req:
       url: https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/DIGITAL_SURFACE_MODEL_MOSAIC_HS/ImageServer
       transparent: true
-
-  dsm_source:
-    type: arcgis
-    opts:
-      featureinfo: true
-      map: false # We only use this source for elevations, not display
-    req:
-      url: https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/DIGITAL_SURFACE_MODEL_MOSAIC/ImageServer
-#      transparent: true
 
   dtm_hs_source:
     type: arcgis
@@ -228,23 +155,18 @@ sources:
       url: https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/DIGITAL_TERRAIN_MODEL_MOSAIC_HS/ImageServer
       transparent: true
 
-  dtm_source:
-    type: arcgis
-    opts:
-      featureinfo: true
-      map: false # We only use this source for elevations, not display
-    req:
-      url: https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/DIGITAL_TERRAIN_MODEL_MOSAIC/ImageServer
-#      transparent: true
-
+# If you set featureinfo to true, then you can enable a popup in ArcGIS Online
+# but the popup does not work, it just spins.
   dtm_slope_source:
     type: arcgis
     opts:
-      featureinfo: true
+      featureinfo: false
       map: true
     req:
       url: https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/DIGITAL_TERRAIN_SLOPE_MODEL_MOSAIC/ImageServer
       transparent: true
+      # This does not work yet apparently.
+      sld: file://red-color-ramp.sld
 
 grids:
   county:
