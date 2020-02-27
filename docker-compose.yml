@@ -28,7 +28,11 @@ services:
     #
     # The ONLY workaround I have found when it's acting up is to use AGO-Assistant
     # to manually copy an existing service and then edit it.
-    
+
+    # For cc-testmaps I want to be able to hit the server without any proxy, so, I do this
+    ports:
+      - "8080:8080"
+
     expose:
       - "8080"
     image: wildsong/mapproxy:latest

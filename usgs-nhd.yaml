@@ -1,0 +1,122 @@
+base: ../globals.yaml
+
+services:
+  demo:
+  wms:
+    md:
+      title: USGS National Hydro Dataset
+      abstract: Proxy of USGS NHD services
+
+layers:
+# List in reverse order here, first will show up at the bottom in the map
+  - name: usgs_wbd
+    title: USGS Watershed Boundary
+    md:
+      attribution:
+        title: US Geologic Survey
+        url: https://www.usgs.gov/core-science-systems/ngp/national-hydrography/access-national-hydrography-products
+    layers:
+      - name: usgs_wbd_layer
+        title: USGS Watershed Boundary
+        sources: [wbd_cache]
+
+  - name: usgs_nhd_hr
+    title: USGS National Hydro Dataset HR Service
+    md:
+      attribution:
+        title: US Geologic Survey
+        url: https://www.usgs.gov/core-science-systems/ngp/national-hydrography/access-national-hydrography-products
+    layers:
+      - name: usgs_nhd_hr_layer
+        title: USGS National Hydro Dataset HR
+        sources: [nhd_hr_cache]
+
+  - name: usgs_nhd
+    title: USGS National Hydro Dataset Service
+    md:
+      attribution:
+        title: US Geologic Survey
+        url: https://www.usgs.gov/core-science-systems/ngp/national-hydrography/access-national-hydrography-products
+    layers:
+      - name: usgs_nhd_layer
+        title: USGS National Hydro Dataset
+        sources: [nhd_cache]
+
+caches:
+  # I'm using PNG images here to get a transparent background
+
+  nhd_cache:
+    grids: [county]
+    sources: [nhd_source]
+    format: image/png
+    request_format: image/png
+    cache: 
+      type: couchdb
+      url: http://couchdb:5984
+      db_name: usgs_nhd
+      tile_metadata: 
+        tile_col: '{{x}}'
+        tile_row: '{{y}}'
+        tile_level: '{{z}}'
+        created_ts: '{{timestamp}}'
+        created: '{{utc_iso}}'
+        center: '{{wgs_tile_centroid}}'
+
+  nhd_hr_cache:
+    grids: [county]
+    sources: [nhd_hr_source]
+    format: image/png
+    request_format: image/png
+    cache: 
+      type: couchdb
+      url: http://couchdb:5984
+      db_name: usgs_nhd_hr
+      tile_metadata: 
+        tile_col: '{{x}}'
+        tile_row: '{{y}}'
+        tile_level: '{{z}}'
+        created_ts: '{{timestamp}}'
+        created: '{{utc_iso}}'
+        center: '{{wgs_tile_centroid}}'
+
+  wbd_cache:
+    grids: [county]
+    sources: [wbd_source]
+    format: image/png
+    request_format: image/png
+    cache: 
+      type: couchdb
+      url: http://couchdb:5984
+      db_name: usgs_wbd
+      tile_metadata: 
+        tile_col: '{{x}}'
+        tile_row: '{{y}}'
+        tile_level: '{{z}}'
+        created_ts: '{{timestamp}}'
+        created: '{{utc_iso}}'
+        center: '{{wgs_tile_centroid}}'
+
+sources:
+  nhd_source:
+    type: arcgis
+    req:
+      url: https://hydro.nationalmap.gov/arcgis/rest/services/nhd/MapServer
+      transparent: true
+
+  nhd_hr_source:
+    type: arcgis
+    req:
+      url: https://hydro.nationalmap.gov/arcgis/rest/services/NHDPlus_HR/MapServer
+      transparent: true
+
+  wbd_source:
+    type: arcgis
+    req:
+      url: https://hydro.nationalmap.gov/arcgis/rest/services/wbd/MapServer
+      transparent: true
+
+grids:
+  county:
+    base: GLOBAL_WEBMERCATOR
+    bbox: [-124.1,45.77,-123.35,46.3] # Clatsop county
+    bbox_srs: EPSG:4326

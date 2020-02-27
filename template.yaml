@@ -1,0 +1,54 @@
+base: ../globals.yaml
+
+services:
+  demo:
+  wms:
+    md:
+      title: general description, will show up as overall title in WMS
+      abstract: Proxy of services
+
+layers:
+# List in reverse order here, first will show up at the bottom in the map
+  - name: service_
+    title: name of service, not visible in ArcGIS Online
+    md:
+      attribution:
+        title: name of provider
+        url: URL of provider's web page
+    layers:
+      - name: service_layer
+        title: name of layer
+        sources: [_cache]
+
+caches:
+  # I'm using PNG images here to get a transparent background
+
+  _cache:
+    grids: [county]
+    sources: [_source]
+    format: image/png
+    request_format: image/png
+    cache: 
+      type: couchdb
+      url: http://couchdb:5984
+      db_name: for example usgs_nhd I like to have the provider (usgs in this case) first
+      tile_metadata: 
+        tile_col: '{{x}}'
+        tile_row: '{{y}}'
+        tile_level: '{{z}}'
+        created_ts: '{{timestamp}}'
+        created: '{{utc_iso}}'
+        center: '{{wgs_tile_centroid}}'
+
+sources:
+  _source:
+    type: arcgis
+    req:
+      url: 
+      transparent: true
+
+grids:
+  county:
+    base: GLOBAL_WEBMERCATOR
+    bbox: [-124.1,45.77,-123.35,46.3] # Clatsop county
+    bbox_srs: EPSG:4326
