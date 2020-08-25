@@ -60,5 +60,10 @@ COPY start_mapproxy.sh .
 RUN chmod 755 start_mapproxy.sh
 
 # Start a waitress WSGI server
-CMD /srv/mapproxy/start_mapproxy.sh
+# You have to add an argument to specify the config
+# as a CMD in the docker-compose file.
+ENTRYPOINT ["python3", "start_mapproxy.py", "log.ini"]
+
+
+
 
