@@ -1,0 +1,12 @@
+# In SWARM, this file is read by configs and the contents are
+# available in /mapproxy_config
+# so it's loaded by the CMD in Dockerfile.
+
+DOMAIN=wildsong.biz
+MY_EMAIL=webmaster@wildsong.biz
+VIRTUAL_HOST=mapproxy.wildsong.biz
+VIRTUAL_PORT=8080
+LETSENCRYPT_HOST=mapproxy.wildsong.biz
+LETSENCRYPT_MAIL=brian@wildsong.biz
+
+export DOMAIN VIRTUAL_HOST VIRTUAL_PORT LETSENCRYPT_HOST LETSENCRYPT_MAIL

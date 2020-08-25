@@ -1,78 +1,70 @@
 version: '3.6'
 services:
   mapproxy:
-    container_name: mapproxy
-    env_file: .env
-    environment:
-      VIRTUAL_HOST: ${MAPPROXY_VIRTUAL_HOST}
-      VIRTUAL_PORT: 8080
-      NETWORK_ACCESS: internal
-      LETSENCRYPT_HOST: ${MAPPROXY_VIRTUAL_HOST}
-      LETSENCRYPT_MAIL: ${MY_EMAIL}
-    volumes:
-      - mapproxy_config:/srv/mapproxy/config
-      - mapproxy_cache:/srv/mapproxy/cache
-    restart: unless-stopped
-    networks:
-      proxy_net:
-        aliases:
-          - mapproxy
-      database_net:
-
-    # LISTENING on PORT 80 DID NOT WORK. ArcGIS Portal SUCKS.
-    # It ALWAYS redirects to port 443, so you HAVE TO listen there.
-    # Then SOMETIMES it gives errors and refuses to let you create new connections.
-    # The error is  "'https://giscache.co.clatsop.or.us/county-aerials/service?SERVICE=WMS&amp;REQUEST=GetCapabilities'
-    #     is not accessible: Error. PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException:
-    #     unable to find valid certification path to requested target."
-    #
-    # The ONLY workaround I have found when it's acting up is to use AGO-Assistant
-    # to manually copy an existing service and then edit it.
-
-    # For cc-testmaps I want to be able to hit the server without any proxy, so, I do this
-    ports:
-      - "8080:8080"
-
-    expose:
-      - "8080"
     image: wildsong/mapproxy:latest
     build:
       context: .
       dockerfile: Dockerfile.mapproxy
 
-  db:
-    container_name: mapproxy_couchdb
-    image: couchdb:latest
-    env_file: .env
     environment:
-#      VIRTUAL_HOST: ${COUCHDB_VIRTUAL_HOST}
-#      VIRTUAL_PORT: 5984
-#      LETSENCRYPT_HOST: ${COUCHDB_VIRTUAL_HOST}
-#      LETSENCRYPT_MAIL: ${MY_EMAIL}
+      # See the start_mapproxy.sh script,
+      # it reads env settings from "configs" via mapproxy_env.
       NETWORK_ACCESS: internal
-      COUCHDATA: /opt/couchdb/data
-      COUCHDB_USER: ${DB_USER}
-      COUCHDB_SECRET: ${DB_PASSWORD}
+
+    volumes:
+# At the moment you have to uncomment this to run in compose,
+#      - ./mapproxy_env:/mapproxy_env
+
+      - config:/srv/mapproxy/config
+      - cache:/srv/mapproxy/cache
+
+# in Swarm, this takes the place of mounting the file
+# I suppose the volume command would work in either case... hmmm... wouldn't it?
+# I wish env_file worked in Swarm. This is a workaround.
+    configs:
+      - mapproxy_env
+
     networks:
       proxy_net:
-        aliases:
-          - couchdb
-      database_net:
-        aliases:
-          # N.B. This name is used in the URLs in the mapproxy configuration files.
-          - couchdb 
+      couchdb_net:
+    # LISTENING on PORT 80 WON'T WORK. Portal
+    # ALWAYS redirects to port 443, so you HAVE TO listen there (via proxy)
+    # Even then SOMETIMES it gives errors and refuses to let you create new
+    # connections.  The error is
+    # "'https://giscache.co.clatsop.or.us/county-aerials/service?SERVICE=WMS&amp;REQUEST=GetCapabilities'
+    # is not accessible: Error. PKIX path building failed:
+    # sun.security.provider.certpath.SunCertPathBuilderException:
+    # unable to find valid certification path to requested target."
+    #
+    # The ONLY workaround I have found when it's acting up is to use AGO-Assistant
+    # to manually copy an existing service and then edit it.
+
+    # For testing I want to be able to hit the server without any proxy, so, I do this
+    ports:
+      - "8080:8080"
+
+  couchdb:
+    image: couchdb:2.3.1
+    env_file: .env
+    environment:
+      NETWORK_ACCESS: internal
+      COUCHDATA: /opt/couchdb/data
+
+# We HAVE to run in party mode for now
+#      COUCHDB_USER: ${DB_USER}
+#      COUCHDB_PASSWORD: ${DB_PASSWORD}
+
     ports:
       - "5984:5984"
-    expose:
-      - "5984"
     volumes:
       - db_data:/opt/couchdb/data
-    restart: unless-stopped
+    networks:
+      couchdb_net:
 
 volumes:
-  mapproxy_config:
+  config:
       name: mapproxy_config
-  mapproxy_cache:
+  cache:
         name: mapproxy_cache
   db_data:
      name: mapproxy_couchdb_data
@@ -81,5 +73,9 @@ networks:
   proxy_net:
     name: proxy_net
     external: true
-  database_net:
-    name: mapproxy_database_net
+  couchdb_net:
+    name: mapproxy_couchdb_net
+
+configs:
+  mapproxy_env:
+    file: ./mapproxy_env

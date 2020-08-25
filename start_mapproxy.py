@@ -1,6 +1,6 @@
 import sys
 import waitress
-import os.path
+import os
 from logging.config import fileConfig
 
 logfile = sys.argv[1]
@@ -9,7 +9,7 @@ config  = sys.argv[2]
 fileConfig(logfile, {'here': os.path.dirname(__file__)})
 
 try:
-    myport = sys.argv[3]
+    myport = os.environ['VIRTUAL_PORT']
 except:
     myport=8080
 
