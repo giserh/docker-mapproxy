@@ -1,22 +1,21 @@
-version: '3.6'
+version: '3.7'
 services:
   mapproxy:
     image: wildsong/mapproxy:latest
+    env_file: .env
     build:
       context: .
       dockerfile: Dockerfile.mapproxy
+      args:
+        - VIRTUAL_HOST=${VIRTUAL_HOST}
+        - VIRTUAL_PORT=${VIRTUAL_PORT}
+        - LETSENCRYPT_HOST=${VIRTUAL_HOST}
+        - LETSENCRYPT_MAIL=${LETSENCRYPT_MAIL}
 
-    environment:
     # I tried to create a CMD script (start_mapproxy.sh) to load the environment
     # from a swarm "config" or a volume in compose
     # but apparently that would not work
     # so far this is the only reliable way that works in both places
-      - DOMAIN=wildsong.biz
-      - MY_EMAIL=webmaster@wildsong.biz
-      - VIRTUAL_HOST=mapproxy.wildsong.biz
-      - VIRTUAL_PORT=8080
-      - LETSENCRYPT_HOST=mapproxy.wildsong.biz
-      - LETSENCRYPT_MAIL=brian@wildsong.biz
 
     volumes:
 # I tried this for compose but could not get it to work either

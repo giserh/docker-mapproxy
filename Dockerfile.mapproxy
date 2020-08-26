@@ -5,8 +5,17 @@ LABEL biz.wildsong.name="mapproxy"
 
 # Because of the continuumio base image, the installation will go into /opt/conda
 
-ENV PROJ_LIB /opt/conda/share/proj
-ENV MAPPROXY_BASE   /srv/mapproxy
+
+# These ARGs can be overridden with "docker-compose build"
+# Look in the docker-compose.yml file.
+#
+ARG VIRTUAL_HOST=host.example.com
+ARG VIRTUAL_PORT=8080
+ARG LETSENCRYPT_HOST=host.example.com
+ARG LETSENCRYPT_MAIL=webmaster@example.com
+
+ENV PROJ_LIB="/opt/conda/share/proj" \
+    MAPPROXY_BASE="/srv/mapproxy"
 
 WORKDIR /tmp
 COPY requirements.txt ./
@@ -34,10 +43,11 @@ RUN conda install -y -c conda-forge unzip
 WORKDIR $MAPPROXY_BASE
 COPY log.ini .
 
+# This is silly all these files should be added later
+
 WORKDIR $MAPPROXY_BASE/config
 COPY globals.yaml .
 COPY seed.yaml .
-
 WORKDIR $MAPPROXY_BASE/config/services
 COPY city-aerials.yaml .
 COPY Astoria2015_coverage.geojson .
@@ -49,15 +59,19 @@ COPY red-color-ramp.sld .
 COPY planning-ocmp.yaml .
 COPY usfws-nwi.yaml .
 
-VOLUME $MAPPROXY_BASE/config
 VOLUME $MAPPROXY_BASE/cache
-
-EXPOSE 8080
+EXPOSE $VIRTUAL_PORT
 
 WORKDIR $MAPPROXY_BASE
 COPY start_mapproxy.py .
 COPY start_mapproxy.sh .
 RUN chmod 755 start_mapproxy.sh
+
+# Make these setting available in the image environment
+ENV VIRTUAL_HOST ${VIRTUAL_HOST}
+ENV VIRTUAL_PORT ${VIRTUAL_PORT}
+ENV LETSENCRYPT_HOST ${LETSENCRYPT_HOST}
+ENV LETSENCRYPT_MAIL $[LETSENCRYPT_MAIL}
 
 # Start a waitress WSGI server
 # You have to add an argument to specify the config
