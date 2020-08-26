@@ -56,7 +56,7 @@ services:
 
     # For testing I want to be able to hit the server without any proxy, so, I do this
     ports:
-      - "8080:8080"
+      - "8888:8080"
     deploy:
       mode: global
       restart_policy:
