@@ -1,4 +1,19 @@
+# JUST MAPPROXY, NO COUCHDB
+
 version: '3.7'
+volumes:
+  cache:
+      name: mapproxy_cache
+
+networks:
+  proxy_net:
+    name: proxy_net
+    external: true
+
+#configs:
+#  mapproxy_env:
+#    file: ./mapproxy_env
+
 services:
   mapproxy:
     image: wildsong/mapproxy:latest
@@ -10,7 +25,7 @@ services:
         - VIRTUAL_HOST=${VIRTUAL_HOST}
         - VIRTUAL_PORT=${VIRTUAL_PORT}
         - LETSENCRYPT_HOST=${VIRTUAL_HOST}
-        - LETSENCRYPT_MAIL=${LETSENCRYPT_MAIL}
+        - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
 
     # I tried to create a CMD script (start_mapproxy.sh) to load the environment
     # from a swarm "config" or a volume in compose
@@ -18,28 +33,18 @@ services:
     # so far this is the only reliable way that works in both places
 
     volumes:
-# I tried this for compose but could not get it to work either
-#      - ./mapproxy_env:/mapproxy_env
-#
-      - config:/srv/mapproxy/config
-
-      # I think this is used for ArcGIS raster tiles
-      # so a service using only couchdb probably does not need it
+      - ./config:/srv/mapproxy/config:ro
       - cache:/srv/mapproxy/cache
 
     # This will be passed to start_mapproxy.py and
     # points to a folder, so mapproxy will start as a multiservice.
     command: ['/srv/mapproxy/config/services']
       
-# in Swarm, this takes the place of mounting the file
-# I suppose the volume command would work in either case... hmmm... wouldn't it?
-# I wish env_file worked in Swarm. This is a workaround.
 #    configs:
 #      - mapproxy_env
 
     networks:
       proxy_net:
-      couchdb_net:
       
     # ArcGIS clients can't connect on HTTP. Portal
     # ALWAYS redirects to port 443, so you HAVE TO listen there (via proxy)
@@ -62,38 +67,10 @@ services:
         condition: on-failure
         delay: 5s
         window: 15s
+#    healthcheck:
+#      test: ["CMD", "curl", "-f", "https://localhost:8080/"]
+#      interval: 10m
+#      timeout: 10s
+#      retries: 3
+#      start_period: 40s
 
-  couchdb:
-    image: couchdb:2.3.1
-#    env_file: .env
-    environment:
-      COUCHDATA: /opt/couchdb/data
-    # We HAVE to run in party mode for now because
-    # I have not figured out how to pass auth from mapproxy to couchdb
-      #COUCHDB_USER: ${DB_USER}
-      #COUCHDB_PASSWORD: ${DB_PASSWORD}
-    ports:
-      - "5984:5984"
-    volumes:
-      - db_data:/opt/couchdb/data
-    networks:
-      couchdb_net:
-
-volumes:
-  config:
-      name: mapproxy_config
-  cache:
-      name: mapproxy_cache
-  db_data:
-     name: mapproxy_couchdb_data
-
-networks:
-  proxy_net:
-    name: proxy_net
-    external: true
-  couchdb_net:
-    name: mapproxy_couchdb_net
-
-#configs:
-#  mapproxy_env:
-#    file: ./mapproxy_env

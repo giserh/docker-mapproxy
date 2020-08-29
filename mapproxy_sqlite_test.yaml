@@ -1,0 +1,53 @@
+base: ../globals.yaml
+
+services:
+  demo:
+  wms:
+    md:
+      title: Clatsop County MapProxy
+      abstract: Proxy of outside services
+
+layers:
+  - name: clatsop_aerials
+    title: Clatsop County aerials
+    layers:
+    - name: osip2018
+      title: Oregon 2018 1'
+      sources: [osip2018_cache]
+
+  - name: astoria_aerials
+    title: City of Astoria aerials
+    layers:
+      - name: astoria2015
+        title: Astoria 2015 6"
+        sources: [astoria2015_cache]
+
+caches:
+  osip2018_cache:
+    grids: [county]
+    sources: [osip2018_source]
+    bulk_meta_tiles: true
+    cache: 
+      type: sqlite
+      directory: /srv/mapproxy/cache/osip2018
+            
+  astoria2015_cache:
+    grids: [astoria]
+    sources: [astoria2015_source]
+    bulk_meta_tiles: true
+    cache: 
+      type: sqlite
+      directory: /srv/mapproxy/cache/astoria2015_simple_test
+            
+sources:
+  osip2018_source:
+    type: arcgis
+    req:
+      url: http://imagery.oregonexplorer.info/arcgis/rest/services/OSIP_2018/OSIP_2018_WM/ImageServer
+
+  astoria2015_source:
+    type: wms
+    req:
+      url: https://gis.astoria.or.us/cgi-bin/mapserv.exe?VERSION=1.1.1&MAP=%2Fms4w%2Fapps%2Fastoria31_Public%2Fhtdocs%2Fastoria31%2Fmaps%2F.%2Fair_2015.map&SRS=EPSG%3A3857
+      layers: air_2015
+      transparent: true

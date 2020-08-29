@@ -1,0 +1,178 @@
+base: ../globals.yaml
+
+services:
+  demo:
+  wms:
+    md:
+      title: City aerial photos
+      abstract: Aerial imagery from various Clatsop County cities
+
+layers:
+  - name: astoria2004
+    title: City of Astoria 2004 6"
+    layers:
+      - name: astoria2004
+        title: City of Astoria 2004 6"
+        sources: [astoria2004_cache]
+    md:
+      attribution:
+        title: City of Astoria Public Works Engineering
+        url: https://www.astoria.or.us/Engineering.aspx
+
+  - name: astoria2010
+    title: City of Astoria 2010 6"
+    layers:
+      - name: astoria2010
+        title: City of Astoria 2010 6"
+        sources: [astoria2010_cache]
+    md:
+      attribution:
+        title: City of Astoria Public Works Engineering
+        url: https://www.astoria.or.us/Engineering.aspx
+
+  - name: astoria2015
+    title: City of Astoria 2015 6"
+    layers:
+      - name: astoria2015
+        title: City of Astoria 2015 6"
+        sources: [astoria2015_cache]
+    md:
+      attribution:
+        title: City of Astoria Public Works Engineering
+        url: https://www.astoria.or.us/Engineering.aspx
+
+# I don't have any URL for this so I use a tile package that I generate in ArcGIS Pro (K:/Aerials/Aerials_project)
+  - name: warrenton2011
+    title: City of Warrenton 2011 6"
+    layers:
+      - name: warrenton2011
+        title: City of Warrenton 2011 6"
+        sources: [warrenton2011_cache]
+    md:
+      attribution:
+        title: City of Warrenton Public Works
+        url: https://www.ci.warrenton.or.us/gis
+
+# I don't have any URL for this so I use a tile package that I generate in ArcGIS Pro (K:/Aerials/Aerials_project)
+  - name: gearhart2009
+    title: City of Gearhart 2009 6"
+    layers:
+      - name: gearhart2009
+        title: City of Gearhart 2009 6"
+        sources: [gearhart2009_cache]
+    md:
+      attribution:
+        title: City of Gearhart
+        url: https://www.cityofgearhart.com/general/page/city-planning-public-works
+
+caches:
+  # I'm using PNG images here to get a transparent background
+
+  astoria2015_cache:
+    grids: [astoria]
+    bulk_meta_tiles: true
+    sources: [astoria2015_source]
+    format: image/png
+    request_format: image/png
+    cache: 
+      type: sqlite
+      directory: /srv/mapproxy/cache/astoria2015
+
+  astoria2010_cache:
+    grids: [astoria]
+    sources: [astoria2010_source]
+    bulk_meta_tiles: true
+    format: image/png
+    request_format: image/png
+    cache: 
+      type: sqlite
+      directory: /srv/mapproxy/cache/astoria2010
+
+  astoria2004_cache:
+    grids: [astoria]
+    sources: [astoria2004_source]
+    bulk_meta_tiles: true
+    format: image/png
+    request_format: image/png
+    cache: 
+      type: sqlite
+      directory: /srv/mapproxy/cache/astoria2004
+
+# There is no source for this cache, because we're using a tile
+# package generated in ArcGIS Pro.
+
+  gearhart2009_cache:
+    sources: []
+    grids: [GLOBAL_WEBMERCATOR]
+    cache:
+      type: compact
+      version: 2
+      # The tpkx file unpacks to "tile/" so for example, do something vaguely like this:
+      #   cd /var/lib/docker/volumes/mapproxy_cache/_data/gearhart2009_aerial
+      #    && unzip gearhart2009_aerial.tpkx.zip
+      # ** I think the busybox unzip might have problems with big (>2GB) files!
+      #  so you could also try the "docker run" thing but use debian instead. To wit:
+      #   docker run --rm -v ${PWD}/gearhart_2009_aerial.tpkx:/tmp/package.zip -v mapproxy_cache:/cache -w /cache/gearhart2009_aerial debian unzip /tmp/package.zip
+      directory: /srv/mapproxy/cache/gearhart2009_aerial/tile
+
+# There is no source for this cache, because we're using a tile
+# package generated in ArcGIS Pro.  That's also why it has to be set
+# to use the global grid.
+
+  warrenton2011_cache:
+    sources: []
+    grids: [GLOBAL_WEBMERCATOR]
+    cache:
+      type: compact
+      version: 2
+      # The tpkx file unpacks to "tile/" so for example, do something vaguely like this:
+      #   cd /var/lib/docker/volumes/mapproxy_cache/_data/warrenton2011_aerial
+      #    && unzip warrenton_2011_aerial.tpkx.zip
+      # ** I think the busybox unzip might have problems with big (>2GB) files!
+      #  so you could also try the "docker run" thing but use debian instead. To wit:
+      #   docker run --rm -v ${PWD}/warrenton_2011_aerial.tpkx:/tmp/package.zip -v mapproxy_cache:/cache -w /cache/warrenton2011_aerial debian unzip /tmp/package.zip
+      directory: /srv/mapproxy/cache/warrenton2011_aerial/tile
+
+            
+sources:
+  astoria2015_source:
+    type: wms
+    req:
+      url: https://gis.astoria.or.us/cgi-bin/mapserv.exe?VERSION=1.1.1&MAP=%2Fms4w%2Fapps%2Fastoria31_Public%2Fhtdocs%2Fastoria31%2Fmaps%2F.%2Fair_2015.map&SRS=EPSG%3A3857
+      layers: air_2015
+      transparent: true
+    # This photo has a large non-transparent black area outside the photo; clip it off.
+    # Then use PNG as the image format so that the clipped areas will be transparent not white.
+    coverage:
+      datasource: Astoria2015_coverage.geojson
+      srs: "EPSG:3857"
+      clip: true
+      
+  astoria2010_source:
+    type: wms
+    req:
+      url: https://gis.astoria.or.us/cgi-bin/mapserv.exe?SERVICE=WMS&VERSION=1.1.1&MAP=%2Fms4w%2Fapps%2Fastoria31_Public%2Fhtdocs%2Fastoria31%2Fmaps%2F.%2Fastoria_aerial_hires_2010.map&SRS=EPSG%3A3857
+      layers: aerials2010
+      transparent: true
+    # This photo has a large non-transparent black area outside the photo; clip it off.
+    # Then use PNG as the image format so that the clipped areas will be transparent not white.
+    coverage:
+      datasource: Astoria2010_coverage.geojson
+      srs: "EPSG:3857"
+      clip: true
+# https://gis.astoria.or.us/cgi-bin/mapserv.exe?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&FORMAT=image%2Fpng%3Bbits%3D8&TRANSPARENT=true&LAYERS=aerials2010&MAP=%2Fms4w%2Fapps%2Fastoria31_Public%2Fhtdocs%2Fastoria31%2Fmaps%2F.%2Fastoria_aerial_hires_2010.map&SRS=EPSG%3A3857&STYLES=&MAP_RESOLUTION=112.5&WIDTH=1333&HEIGHT=1026&BBOX=-13786760.476540796%2C5809172.109307839%2C-13784213.212573193%2C5811132.719083354
+
+  astoria2004_source:
+    type: wms
+    req:
+      url: https://gis.astoria.or.us/cgi-bin/mapserv.exe?SERVICE=WMS&VERSION=1.1.1&MAP=%2Fms4w%2Fapps%2Fastoria31_Public%2Fhtdocs%2Fastoria31%2Fmaps%2F.%2Fastoria_aerial_hires_2004.map&SRS=EPSG%3A3857
+      layers: aerials2004
+      transparent: true
+    # This photo has a large non-transparent black area outside the photo; clip it off.
+    # Then use PNG as the image format so that the clipped areas will be transparent not white.
+    coverage:
+      datasource: Astoria2004_coverage.geojson
+      srs: "EPSG:3857"
+      clip: true
+# https://gis.astoria.or.us/cgi-bin/mapserv.exe?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&FORMAT=image%2Fpng%3Bbits%3D8&TRANSPARENT=true&LAYERS=aerials2004&MAP=%2Fms4w%2Fapps%2Fastoria31_Public%2Fhtdocs%2Fastoria31%2Fmaps%2F.%2Fastoria_aerial_hires_2004.map&SRS=EPSG%3A3857&STYLES=&MAP_RESOLUTION=112.5&WIDTH=1333&HEIGHT=1026&BBOX=-13786760.476540796%2C5809172.109307839%2C-13784213.212573193%2C5811132.719083354
+

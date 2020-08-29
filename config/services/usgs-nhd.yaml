@@ -1,0 +1,95 @@
+base: ../globals.yaml
+
+services:
+  demo:
+  wms:
+    md:
+      title: USGS National Hydro Dataset
+      abstract: Proxy of USGS NHD services
+
+layers:
+# List in reverse order here, first will show up at the bottom in the map
+  - name: usgs_wbd
+    title: USGS Watershed Boundary
+    md:
+      attribution:
+        title: US Geologic Survey
+        url: https://www.usgs.gov/core-science-systems/ngp/national-hydrography/access-national-hydrography-products
+    layers:
+      - name: usgs_wbd_layer
+        title: USGS Watershed Boundary
+        sources: [wbd_cache]
+
+  - name: usgs_nhd_hr
+    title: USGS National Hydro Dataset HR Service
+    md:
+      attribution:
+        title: US Geologic Survey
+        url: https://www.usgs.gov/core-science-systems/ngp/national-hydrography/access-national-hydrography-products
+    layers:
+      - name: usgs_nhd_hr_layer
+        title: USGS National Hydro Dataset HR
+        sources: [nhd_hr_cache]
+
+  - name: usgs_nhd
+    title: USGS National Hydro Dataset Service
+    md:
+      attribution:
+        title: US Geologic Survey
+        url: https://www.usgs.gov/core-science-systems/ngp/national-hydrography/access-national-hydrography-products
+    layers:
+      - name: usgs_nhd_layer
+        title: USGS National Hydro Dataset
+        sources: [nhd_cache]
+
+caches:
+  # I'm using PNG images here to get a transparent background
+
+  nhd_cache:
+    grids: [county]
+    sources: [nhd_source]
+    format: image/png
+    request_format: image/png
+    cache: 
+      type: sqlite
+      directory: /srv/mapproxy/cache/nhd
+
+  nhd_hr_cache:
+    grids: [county]
+    sources: [nhd_hr_source]
+    bulk_meta_tiles: true
+    format: image/png
+    request_format: image/png
+    cache: 
+      type: sqlite
+      directory: /srv/mapproxy/cache/nhd_hr
+
+  wbd_cache:
+    grids: [county]
+    sources: [wbd_source]
+    bulk_meta_tiles: true
+    format: image/png
+    request_format: image/png
+    cache: 
+      type: sqlite
+      directory: /srv/mapproxy/cache/wbd
+
+sources:
+  nhd_source:
+    type: arcgis
+    req:
+      url: https://hydro.nationalmap.gov/arcgis/rest/services/nhd/MapServer
+      transparent: true
+
+  nhd_hr_source:
+    type: arcgis
+    req:
+      url: https://hydro.nationalmap.gov/arcgis/rest/services/NHDPlus_HR/MapServer
+      transparent: true
+
+  wbd_source:
+    type: arcgis
+    req:
+      url: https://hydro.nationalmap.gov/arcgis/rest/services/wbd/MapServer
+      transparent: true
+

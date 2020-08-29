@@ -1,0 +1,16 @@
+# This is silly all these files should be added later
+
+WORKDIR $MAPPROXY_BASE/config
+COPY globals.yaml .
+COPY seed.yaml .
+WORKDIR $MAPPROXY_BASE/config/services
+COPY city-aerials.yaml .
+COPY Astoria2015_coverage.geojson .
+COPY Astoria2010_coverage.geojson .
+COPY Astoria2004_coverage.geojson .
+COPY county-aerials.yaml .
+COPY lidar-2020.yaml .
+COPY red-color-ramp.sld .
+COPY planning-ocmp.yaml .
+COPY usfws-nwi.yaml .
+

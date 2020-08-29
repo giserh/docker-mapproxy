@@ -228,3 +228,14 @@ them independently.  To do this I have to figure out the nginx
 changes. This will help a lot at CC anyway since I have limited access
 to DNS.
 
+
+First time start, create the databases, see
+https://docs.couchdb.org/en/stable/setup/single-node.html
+
+    curl -X PUT http://127.0.0.1:5984/_users
+    curl -X PUT http://127.0.0.1:5984/_replicator
+    curl -X PUT http://127.0.0.1:5984/_global_changes
+
+Admin accounts go into a text file called local.ini not a database, see
+https://docs.couchdb.org/en/stable/config/auth.html#config-admins
+

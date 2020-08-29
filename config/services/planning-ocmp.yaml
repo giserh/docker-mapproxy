@@ -1,0 +1,95 @@
+base: ../globals.yaml
+
+services:
+  demo:
+  wms:
+    md:
+      title: Oregon Coastal Management Program
+      abstract: Proxy of OCMP services
+
+layers:
+  - name: ocmp_diking_drainage_districts
+    title: OCMP Diking Drainage Districts
+    layers:
+      - name: ocmp_diking_drainage_districts
+        title: OCMP Diking Drainage Districts
+        sources: [ocmp_diking_drainage_districts_cache]
+    md:
+      attribution:
+        title: Oregon Coastal Management Program
+        url: https://www.oregon.gov/LCD/OCMP/pages/index.aspx
+
+  - name: ocmp_dikes_levees
+    title: OCMP Dikes and Levees
+    layers:
+      - name: ocmp_dikes_levees
+        title: OCMP Dikes and Levees
+        sources: [ocmp_dikes_levees_cache]
+    md:
+      attribution:
+        title: Oregon Coastal Management Program
+        url: https://www.oregon.gov/LCD/OCMP/pages/index.aspx
+
+  - name: ocmp_coastal_access
+    title: OCMP Coastal Access
+    layers:
+      - name: ocmp_coastal_access
+        title: OCMP Coastal Access
+        sources: [ocmp_coastal_access_cache]
+    md:
+      attribution:
+        title: Oregon Coastal Management Program
+        url: https://www.oregon.gov/LCD/OCMP/pages/index.aspx
+
+caches:
+  # I'm using PNG images here to get a transparent background
+
+
+  ocmp_diking_drainage_districts_cache:
+    grids: [county]
+    sources: [ocmp_diking_drainage_districts_source]
+    bulk_meta_tiles: true
+    format: image/png
+    request_format: image/png
+    cache: 
+      type: sqlite
+      directory: /srv/mapproxy/cache/ocmp_diking_drainage
+
+  ocmp_dikes_levees_cache:
+    grids: [county]
+    sources: [ocmp_dikes_levees_source]
+    bulk_meta_tiles: true
+    format: image/png
+    request_format: image/png
+    cache: 
+      type: sqlite
+      directory: /srv/mapproxy/cache/ocmp_dikes_levees
+
+  ocmp_coastal_access_cache:
+    grids: [county]
+    sources: [ocmp_coastal_access_source]
+    bulk_meta_tiles: true
+    format: image/png
+    request_format: image/png
+    cache: 
+      type: sqlite
+      directory: /srv/mapproxy/cache/ocmp_coastal_access
+
+sources:
+  ocmp_diking_drainage_districts_source:
+    type: arcgis
+    req:
+      url: https://maps.oda.state.or.us/arcgis/rest/services/Projects/OCMP_Fellowship2011_Diking_Drainage_Districts_Mattison/MapServer
+      transparent: true
+
+  ocmp_dikes_levees_source:
+    type: arcgis
+    req:
+      url: https://maps.oda.state.or.us/arcgis/rest/services/Projects/OCMP_Fellowship2011_Dikes_Levees_Mattison/MapServer
+      transparent: true
+
+  ocmp_coastal_access_source:
+    type: arcgis
+    req:
+      url: https://maps.oda.state.or.us/arcgis/rest/services/Projects/OCMP_CoastalAccess/MapServer
+      transparent: true

@@ -24,6 +24,21 @@ globals:
           # default is 90
           jpeg_quality: 80
       
+grids:
+  # Using a bounding box here will limit the data we cache to
+  # an area of interest to us for each service.
 
+  county:
+    base: GLOBAL_WEBMERCATOR
+    bbox: [-124.1,45.77,-123.35,46.3] # Clatsop county
+    bbox_srs: EPSG:4326
 
-      
+  astoria:
+    base: GLOBAL_WEBMERCATOR
+    bbox: [-123.87,46.16,-123.73,46.22] # City of Astoria
+    bbox_srs: EPSG:4326
+                                
+  warrenton:
+    base: GLOBAL_WEBMERCATOR
+    bbox: [-123.87,46.16,-123.73,46.22] # City of Astoria
+    bbox_srs: EPSG:4326

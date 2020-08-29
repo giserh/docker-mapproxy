@@ -1,0 +1,22 @@
+version: '3.6'
+services:
+  couchdb:
+    image: couchdb:latest
+    env_file: .env
+    environment:
+      COUCHDATA: /opt/couchdb/data
+      COUCHDB_USER: ${DB_USER}
+      COUCHDB_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5984:5984"
+    volumes:
+      - db_data:/opt/couchdb/data
+    restart: unless-stopped
+
+volumes:
+  mapproxy_config:
+      name: mapproxy_config
+  mapproxy_cache:
+        name: mapproxy_cache
+  db_data:
+     name: mapproxy_couchdb_data

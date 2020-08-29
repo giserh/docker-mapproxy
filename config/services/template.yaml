@@ -1,0 +1,43 @@
+base: ../globals.yaml
+
+services:
+  demo:
+  wms:
+    md:
+      title: general description, will show up as overall title in WMS
+      abstract: Proxy of services
+
+layers:
+# List in reverse order here, first will show up at the bottom in the map
+  - name: SERVICE_
+    title: name of service, not visible in ArcGIS Online
+    md:
+      attribution:
+        title: name of provider
+        url: URL of provider's web page
+    layers:
+      - name: service_layer
+        title: name of layer
+        sources: [SERVICE_cache]
+
+caches:
+  # I'm using PNG images here to get a transparent background
+
+  SERVICE_cache:
+    grids: [county]
+    sources: [SERVICE_source]
+    # "bulk" improves performance with sqlite, see https://mapproxy.org/docs/nightly/caches.html
+    bulk_meta_tiles: true
+    format: image/png
+    request_format: image/png
+    cache: 
+      type: sqlite
+      directory: /srv/mapproxy/cache/for example usgs_nhd I like to have the provider (usgs in this case) first
+
+sources:
+  SERVICE_source:
+    type: arcgis
+    req:
+      url: https://SERVICE DEFINITION FOR REMOTE SITE
+      transparent: true
+

@@ -1,0 +1,43 @@
+base: ../globals.yaml
+
+services:
+  demo:
+  wms:
+    md:
+      title: USDA NAIP imagery
+      abstract: Proxy of NAIP imagery services
+
+layers:
+  - name: naip_conus_prime
+    title: NAIP CONUS Prime
+    layers:
+      - name: naip_conus_prime
+        title: NAIP CONUS Prime
+        sources: [naip_conus_cache]
+    md:
+      attribution:
+        title: USDA NAIP imagery program
+
+caches:
+  naip_conus_cache:
+    grids: [GLOBAL_WEBMERCATOR]
+    sources: [naip_conus_source]
+    bulk_meta_tiles: true
+    format: image/jpeg
+    request_format: image/jpeg
+    cache:
+      type: sqlite
+      directory: /srv/mapproxy/cache/naip_conus
+            
+sources:
+  naip_conus_source:
+    type: arcgis
+    req:
+      url: https://gis.apfo.usda.gov/arcgis/rest/services/NAIP/USDA_CONUS_PRIME/ImageServer
+
+grids:
+  conus:
+    base: GLOBAL_WEBMERCATOR
+    bbox: [-124.1,45.77,-123.35,46.3] # Clatsop county
+    bbox_srs: EPSG:4326
+

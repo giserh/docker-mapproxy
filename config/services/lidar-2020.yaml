@@ -1,0 +1,146 @@
+base: ../globals.yaml
+
+# This service has only the hillshades
+# because I have not figured out the issues
+# with queries and popups.
+
+services:
+  demo:
+  wms:
+    md:
+      title: Hillshades from DOGAMI LiDAR
+      abstract: Proxy of DOGAMI LiDAR services
+
+layers:
+  - name: digital_terrain_model_hs
+    title: Hillshade service
+    md:
+      attribution:
+        title: Oregon Department of Geology and Mineral Industries
+        url: https://dogami.oregon.gov
+    layers:
+      - name: digital_terrain_model_layer_hs
+        title: Hillshade (bare earth)
+        sources: [dtm_hs_cache]
+
+  # I'd like to change the colors on this one.
+  - name: digital_terrain_slope_model
+    title: Slope service
+    md:
+      attribution:
+        title: Oregon Department of Geology and Mineral Industries
+        url: https://dogami.oregon.gov
+    layers:
+      - name: digital_terrain_slope_model_layer
+        title: Slope (in degrees)
+        sources: [dtm_slope_cache]
+
+  - name: digital_surface_model_hs
+    title: Highest Hit Hillshade service
+    md:
+      attribution:
+        title: Oregon Department of Geology and Mineral Industries
+        url: https://dogami.oregon.gov
+    layers:
+      - name: digital_surface_model_layer_hs
+        title: Highest Hit Hillshade
+        sources: [dsm_hs_cache]
+
+# Without the height feature there is not much point in including this service.
+#  - name: canopy
+#    title: Canopy service
+#    md:
+#      attribution:
+#        title: Oregon Department of Geology and Mineral Industries
+#        url: https://dogami.oregon.gov
+#    layers:
+#      - name: canopy_hs_layer
+#        title: Canopy Hillshade
+#        sources: [canopy_hs_cache]
+
+caches:
+#  canopy_hs_cache:
+#    grids: [county]
+#    sources: [canopy_hs_source]
+#    bulk_meta_tiles: true
+#    format: image/jpeg
+#    request_format: image/jpeg
+#    cache: 
+#      type: sqlite
+#       directory: /srv/mapproxy/cache/lidar_canopy_hs
+           
+  dsm_hs_cache:
+    grids: [county]
+    sources: [dsm_hs_source]
+    bulk_meta_tiles: true
+    format: image/jpeg
+    request_format: image/jpeg
+    cache: 
+      type: sqlite
+      directory: /srv/mapproxy/cache/lidar_dsm_hs
+           
+  dtm_hs_cache:
+    grids: [county]
+    sources: [dtm_hs_source]
+    bulk_meta_tiles: true
+    format: image/jpeg
+    request_format: image/jpeg
+    cache: 
+      type: sqlite
+      directory: /srv/mapproxy/cache/lidar_dtm_hs
+           
+  dtm_slope_cache:
+    grids: [county]
+    sources: [dtm_slope_source]
+    bulk_meta_tiles: true
+    format: image/jpeg
+    request_format: image/jpeg
+    cache: 
+      type: sqlite
+      directory: /srv/mapproxy/cache/lidar_dtm_slope
+           
+sources:
+#  canopy_hs_source:
+#    type: arcgis
+#    opts:
+#      featureinfo: false
+#      map: true
+#    req:
+#      url: https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/CANOPY_HEIGHT_MODEL_MOSAIC_HS/ImageServer
+#      transparent: true
+
+  dsm_hs_source:
+    type: arcgis
+    opts:
+      featureinfo: false
+# throws a warning message
+#      map: true
+    req:
+      url: https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/DIGITAL_SURFACE_MODEL_MOSAIC_HS/ImageServer
+      transparent: true
+
+  dtm_hs_source:
+    type: arcgis
+    opts:
+      featureinfo: false
+# throws a warning message
+#      map: true
+    req:
+      url: https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/DIGITAL_TERRAIN_MODEL_MOSAIC_HS/ImageServer
+      transparent: true
+
+# If you set featureinfo to true, then you can enable a popup in ArcGIS Online
+# but the popup does not work, it just spins.
+  dtm_slope_source:
+    type: arcgis
+    opts:
+      featureinfo: false
+      map: true
+    req:
+      url: https://gis.dogami.oregon.gov/arcgis/rest/services/lidar/DIGITAL_TERRAIN_SLOPE_MODEL_MOSAIC/ImageServer
+      transparent: true
+      # This does not work yet apparently.
+# throws a warning message
+#      sld: file://red-color-ramp.sld
+
+

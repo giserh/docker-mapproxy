@@ -1,10 +1,11 @@
 lxml>=4.4.1
-numpy>=1.17.4
+numpy>=1.19.1
 boto3>=1.10.19
 requests>=2.22.0
 eventlet>=0.25.0
 prometheus_client>=0.7.1
-geos>=3.8.0
-proj>=6.2.1
+geos>=3.8.1
+proj>=7.1.0
 shapely>=1.6.4
 waitress>=1.4.0
+pyproj>=2.6.0

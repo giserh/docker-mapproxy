@@ -1,0 +1,76 @@
+base: ../globals.yaml
+
+services:
+  demo:
+  wms:
+    md:
+      title: USFWS National Wetland Inventory
+      abstract: Proxy of USFWS NWI services
+
+layers:
+  - name: NWI
+    title: US FWS National Wetland Inventory
+    md:
+      attribution:
+        title: US Fish and Wildlife Service
+        url: https://www.fws.gov/wetlands/Data/Web-Map-Services.html
+    layers:
+      - name: nwi
+        title: Wetlands
+        sources: [nwi_cache]
+
+  - name: NWI_Metadata
+    title: US FWS National Wetland Inventory (metadata)
+    md:
+      attribution:
+        title: US Fish and Wildlife Service
+        url: https://www.fws.gov/wetlands/Data/Web-Map-Services.html
+    layers:
+      - name: nwi_metadata
+        title: Wetlands Metadata
+        sources: [nwi_metadata_cache]
+
+caches:
+  # I'm using PNG images here to get a transparent background
+
+  nwi_cache:
+    grids: [county]
+    sources: [nwi_source]
+    bulk_meta_tiles: true
+    format: image/png
+    request_format: image/png
+    cache: 
+      type: sqlite
+      directory: /srv/mapproxy/cache/nwi
+
+  nwi_metadata_cache:
+    grids: [county]
+    sources: [nwi_metadata_source]
+    bulk_meta_tiles: true
+    request_format: image/png
+    cache: 
+      type: sqlite
+      directory: /srv/mapproxy/cache/nwi_metadata
+
+sources:
+  nwi_source:
+    type: wms
+    req:
+      url: https://www.fws.gov/wetlands/arcgis/services/Wetlands/MapServer/WMSServer
+      layers: 1
+      transparent: true
+    wms_opts:
+      version: 1.3.0
+      legendgraphic: true
+      legendurl: file:///srv/mapproxy/nwi_legend.png
+
+# This service has one layer for features and one layer for metadata
+  nwi_metadata_source:
+    type: wms
+    req:
+      url: https://www.fws.gov/wetlands/arcgis/services/Wetlands/MapServer/WMSServer
+      layers: 0
+    wms_opts:
+      version: 1.3.0
+      featureinfo: true
+      map: false

@@ -1,0 +1,9 @@
+FROM couchdb:2.3.1
+LABEL maintainer="Brian Wilson <brian@wildsong.biz>"
+LABEL version="2.3.1"
+LABEL biz.wildsong.name="mapproxy"
+
+COPY wildsong.ini /opt/couchdb/etc/local.d/
+
+
+
