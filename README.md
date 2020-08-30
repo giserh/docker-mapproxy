@@ -6,31 +6,29 @@ MapProxy in Docker is used to build a cascading WMS with several
 services hosted remotely. The included configuration works with a
 public server located in Oregon.
 
-The tiles are cached in a tile store; this project uses CouchDB for storage.
+The tiles are cached in a tile store; I've switched from using CouchDB
+to SQLite. There is now only one container, so there are never any
+connection problems. The CouchDB code is still hanging around.
 
-This version of the project uses Docker Compose; the next version will
-use Docker Swarm instead, so that the containers can be on different
-servers.
+This version of the project uses either Docker Compose (for testing)
+or Docker Swarm for production.
 
-The docker-compose.yml file will set up both MapProxy and CouchDB
-docker containerss and link them together over a private docker
-network called 'couchdb_net'.
+The docker-compose.yml will set up a single container, containing mapproxy.
+
+The docker-compose-couchdb.yml file will set up both MapProxy and CouchDB
+docker containers and link them together over a private docker network.
 
 ArcGIS servers refuse to connect to unencrypted WMS services (HTTP).
 I get around this by running MapProxy behind an nginx server. The
-Docker Compose file here is set up to work with the one described in
-my github repository Wildsong/proxy.
+Dockerfile.mapproxy and Docker Compose files here work with the proxy
+described in my github repository Wildsong/proxy.
 
 ## Build
 
-We use the standard couchdb image but build our own mapproxy image
-because we want maximum portability, as soon as the ink is dry here
-we're going to add support for Docker For Windows.
+First customize a .env file, then build an image.
 
-    docker build -t wildsong/mapproxy .
-
-or if you prefer
-
+    cp sample.env .env
+    emacs .env
     docker-compose build
 
 ### Note on git version
@@ -42,25 +40,18 @@ To see the bug, do this in python 3.8 (it won't affect older pythons).
     mapproxy.compat.modules.__dir__()
 
 The output should show the 'escape' function is available, but fails
-in the released 1.12.  I plan on using the released package at 1.13.
+in the released 1.12.  I plan on using the released package at 1.13,
+should it ever come out.
 
 ## Configure
 
-The default in the example is to use multiple services. That's defined in the files
-globals.yaml, city-aerials.yaml and county-aerials.yaml.
+The default in the example is to use multiple services. That's defined
+in the files globals.yaml, city-aerials.yaml and county-aerials.yaml.
+
+The next version will use a separate mapproxy container for each service.
 
 You can edit the start_mapproxy.py and use mapproxy.yaml if you want a
 single service only.
-
-### Set up .env
-
-Copy sample.env to .env and edit it with your own information.
-
-The first time you run, docker will create a mapproxy_files volume and
-put the default mapproxy.yaml into it, under config/. Refer to the
-mapproxy.org documentation on the files that could go in there.
-
-I will put some sample files in examples/ for you.
 
 ### Check this project's config
 
@@ -68,13 +59,18 @@ I will put some sample files in examples/ for you.
 
 ## How to run it
 
-The command
+These commands work,
+
+   docker-compose up
+
+or
 
    docker stack deploy -c docker-compose.yml mapproxy
 
-will start containers for MapProxy and CouchDB.
 
 ### Set up CouchDB
+
+I am not using CouchDB right now, this is here should I switch back to it.
 
 The "deploy" command will bring up mapproxy and couchdb, but the first
 time it starts you will have to tell couchdb that this is a
@@ -173,16 +169,19 @@ same server.
 
 ## Updating the configuration
 
-If you edit the files once everything is up and running you can copy
-new ones into the containers, for example,
-
-    for f in As*geojson city*yaml; do
-      docker cp $f mapproxy://srv/mapproxy/config/services/
-    done
+The configuration files are mounted from the config/ directory.
     
 I suppose you need to restart MapProxy to get it to reread the change.
-Remember to empty the appropriate cache database(s) in CouchDB so that they will
-get new data.
+
+    docker-compose restart
+
+or
+
+    docker stack rm mapproxy
+    docker stack deploy -c docker-compose.yml mapproxy
+
+If you are using CouchDB remember to empty the appropriate cache
+database(s) in CouchDB so that they will get new data.
 
 ## Credits
 
@@ -200,13 +199,20 @@ Links to some of the code I use
 
 ## TO DO LIST
 
+2020-Aug-29
+
+I have a docker-compose set up running that works for 24-48 hours and then suddenly,
+it stops resolving couchdb so the data connection fails and it's dead. Rather than
+wrestle with it I have switched to SQLite. I have implemented a healthcheck too.
+
+
 As of 2020-Aug-19
 
 I am stuck at couchdb 2.3.x because user/pass keeps mapproxy out in 3.x
 FIGURE OUT AUTH, mapproxy has to send credentials to couchdb,
 or stop using couch I suppose. :-(
 
-I have stopped work on a Windows Server version because it was just
+I stopped working on a Windows Server version because it was just
 easier to get a Debian container running. We have the best IT staff in
 the world here in Clatsop County.
 
