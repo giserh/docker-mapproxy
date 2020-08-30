@@ -67,10 +67,10 @@ services:
         condition: on-failure
         delay: 5s
         window: 15s
-#    healthcheck:
-#      test: ["CMD", "curl", "-f", "https://localhost:8080/"]
-#      interval: 10m
-#      timeout: 10s
-#      retries: 3
-#      start_period: 40s
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
 

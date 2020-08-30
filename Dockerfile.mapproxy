@@ -6,7 +6,7 @@ LABEL biz.wildsong.name="mapproxy"
 # Because of the continuumio base image, the installation will go into /opt/conda
 
 # This helps with debugging problems
-RUN apt-get update && apt-get install iputils-ping -y
+RUN apt-get update && apt-get install curl iputils-ping -y
 
 # These ARGs can be overridden with "docker-compose build"
 # Look in the docker-compose.yml file.
