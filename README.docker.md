@@ -6,17 +6,21 @@ Mapproxy is a service to proxy and cache WMS map services.
 
 ## How to run Mapproxy in Docker.
 
+This is how you **could** start Mapproxy, but I use Docker Compose.
+There is a sample docker-compose.yml in the Github set up to work
+with an nginx reverse proxy. The config/ folder has a startup configuration file. There is also an examples/ folder that
+has more suggested configurations for different services.
+
 ```bash
 docker run -d --name=mapproxy \
--p 8080:8080 \
--v ./config:/srv/mapproxy/config:ro -v cache:/srv/mapproxy/cache \
-wildsong/mapproxy:latest /srv/mapproxy/config/services
+    -p 8080:8080 \
+    -v ${PWD}/config:/srv/mapproxy/config:ro -v cache:/srv/mapproxy/cache \
+    wildsong/mapproxy:latest /srv/mapproxy/config/services
 ```
 
-## Project status 2022-03-02
+## Project status
 
-I added the Github Action today to build and push to Docker Hub, 
-let's see how that goes.
+2022-03-03 It's working, and it has the latest mapproxy pulled from git.
 
 ## Github repository
 

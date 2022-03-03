@@ -23,7 +23,7 @@ docker containers and link them together over a private docker network.
 
 ArcGIS servers refuse to connect to unencrypted WMS services (HTTP).
 I get around this by running MapProxy behind an nginx server. The
-Dockerfile.mapproxy and Docker Compose files here work with the proxy
+Dockerfile and Docker Compose files here work with the proxy
 described in my github repository Wildsong/proxy.
 
 ## Build
@@ -35,21 +35,29 @@ First customize a .env file, then build an image.
 ```bash
 cp sample.env .env
 emacs .env
-docker buildx build -t wildsong/mapproxy .
+docker build -t wildsong/mapproxy .
 ```
 
-### Note on git version
+### Note on Conda
 
-There's a bug in 1.12 mapproxy so the Dockerfile pulls
-newer source from git.
-To see the bug, do this in python 3.8 (it won't affect older pythons).
+Using conda to pull in the python dependencies 
+pulls in newer releases than pip (for example, libgeos) 
+so it's the easiest path I can find.
 
-    import mapproxy.compat.modules
-    mapproxy.compat.modules.__dir__()
+Continuum based their Conda image on Debian 11. It was great
+until today when I could no longer run the apt-update step for some reason.
+So now I have to build my own miniconda3 image.
 
-The output should show the 'escape' function is available, but fails
-in the released 1.12.  I plan on using the released package at 1.13,
-when it comes out.
+### Note on git version of Mapproxy
+
+I started using the git version of mapproxy when there was a bug in the
+1.12 release preventing me from building. I've just stuck with git
+process since then.
+
+I used to use curl to pull the release version; I would use git now so
+curl is no longer being installed.
+
+Conda also installs git, probably because Debian git was too old.
 
 ## Configure
 
@@ -83,7 +91,7 @@ docker stack deploy -c docker-compose.yml mapproxy
 
 ### Set up CouchDB
 
-I am not using CouchDB right now, this is here should I switch back to it.
+***I am not using CouchDB right now, this is here should I switch back to it.***
 
 The "deploy" command will bring up mapproxy and couchdb, but the first
 time it starts you will have to tell couchdb that this is a
@@ -220,26 +228,16 @@ Links to some of the code I use
 
 ## TO DO LIST
 
+2022-Mar-03
+
+I might be able to shrink the image size by going to a two stage build 
+but I have not tried yet.
+
 2020-Aug-29
 
 I have a docker-compose set up running that works for 24-48 hours and then suddenly,
 it stops resolving couchdb so the data connection fails and it's dead. Rather than
 wrestle with it I have switched to SQLite. I have implemented a healthcheck too.
-
-As of 2020-Aug-19
-
-I am stuck at couchdb 2.3.x because user/pass keeps mapproxy out in 3.x
-FIGURE OUT AUTH, mapproxy has to send credentials to couchdb,
-or stop using couch I suppose. :-(
-
-I stopped working on a Windows Server version because it was just
-easier to get a Debian container running. We have the best IT staff in
-the world here in Clatsop County.
-
-TODO: Currently you must manually create databases to hold the tiles.
-Maybe I should automate it?
-
-TODO: Show how to use MapProxy and CouchDB on different servers. (SWARM!)
 
 TODO: Configure a separate container for each service instead of using the
 mapproxy multiple service feature. EG
