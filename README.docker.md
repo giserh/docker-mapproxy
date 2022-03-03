@@ -4,6 +4,11 @@ Mapproxy is a service to proxy and cache WMS map services.
 
 (Actually it does **a lot more than that**. See the link under "Thanks")
 
+### Locale
+
+This image has the PROJ datum file for North America built in, 
+if you need a different one drop me a line.
+
 ## How to run Mapproxy in Docker.
 
 This is how you **could** start Mapproxy, but I use Docker Compose.

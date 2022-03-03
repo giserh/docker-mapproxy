@@ -26,6 +26,12 @@ I get around this by running MapProxy behind an nginx server. The
 Dockerfile and Docker Compose files here work with the proxy
 described in my github repository Wildsong/proxy.
 
+## Locale
+
+Near the end of the Dockerfile, I have a line that pulls the datum file for **North America**.
+If you want to use this image and live somewhere else, tell me and I will add it for you.
+Send a pull request or an email or open an issue.
+
 ## Build
 
 You can build locally but Github Actions will build and push an image to Docker Hub. Skip ahead.
@@ -44,9 +50,9 @@ Using conda to pull in the python dependencies
 pulls in newer releases than pip (for example, libgeos) 
 so it's the easiest path I can find.
 
-Continuum based their Conda image on Debian 11. It was great
+ContinuumIO based their Conda image on Debian 11. It was great
 until today when I could no longer run the apt-update step for some reason.
-So now I have to build my own miniconda3 image.
+So now the Dockerfile builds on a Debian image and adds miniconda3.
 
 ### Note on git version of Mapproxy
 
@@ -230,8 +236,8 @@ Links to some of the code I use
 
 2022-Mar-03
 
-I might be able to shrink the image size by going to a two stage build 
-but I have not tried yet.
+I might be able to shrink the image size by going to a two stage build.
+I have tried but not got it going, see Dockerfile.twostage.
 
 2020-Aug-29
 
