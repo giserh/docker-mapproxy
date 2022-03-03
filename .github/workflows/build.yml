@@ -20,7 +20,7 @@ jobs:
           registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
-          dockerfile: ./Dockerfile.mapproxy
+          dockerfile: ./Dockerfile
       -
         name: Update the description on Docker Hub
         uses: peter-evans/dockerhub-description@v2
@@ -30,7 +30,6 @@ jobs:
           repository: wildsong/mapproxy
           readme-filepath: ./README.docker.md
           short-description: ${{ github.event.repository.description }}
-
 
 
 
