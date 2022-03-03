@@ -64,13 +64,13 @@ services:
     deploy:
       mode: global
       restart_policy:
-        condition: on-failure
+        condition: any
         delay: 5s
         window: 15s
+        max_attempts: 10
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/"]
       interval: 10s
       timeout: 10s
       retries: 3
       start_period: 30s
-
