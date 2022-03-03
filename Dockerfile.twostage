@@ -18,8 +18,9 @@ ENV MAPPROXY_BASE="/srv/mapproxy"
 RUN apt-get update && apt-get install wget build-essential -y
 
 WORKDIR /root
-RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
-    sh ./Miniconda3-latest-Linux-x86_64.sh -b
+ADD https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh .
+RUN sh ./Miniconda3-latest-Linux-x86_64.sh -b && \
+    rm ./Miniconda3-latest-Linux-x86_64.sh
 ENV PATH=${CONDA}/bin/:${PATH}
 COPY requirements.txt ./
 # This will upgrade conda, so the fact that the base image is old does not matter
