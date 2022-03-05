@@ -18,14 +18,6 @@ services:
   mapproxy:
     image: wildsong/mapproxy:latest
     env_file: .env
-    build:
-      context: .
-      dockerfile: Dockerfile.mapproxy
-      args:
-        - VIRTUAL_HOST=${VIRTUAL_HOST}
-        - VIRTUAL_PORT=${VIRTUAL_PORT}
-        - LETSENCRYPT_HOST=${VIRTUAL_HOST}
-        - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
 
     # I tried to create a CMD script (start_mapproxy.sh) to load the environment
     # from a swarm "config" or a volume in compose
