@@ -37,6 +37,7 @@ services:
 
     networks:
       proxy_net:
+        ipv4_address: ${STATIC_IP_ADDRESS}
       
     # ArcGIS clients can't connect on HTTP. Portal
     # ALWAYS redirects to port 443, so you HAVE TO listen there (via proxy)
@@ -53,13 +54,18 @@ services:
     # For testing I want to be able to hit the server without any proxy, so, I do this
     ports:
       - "8888:8080"
-    deploy:
-      mode: global
-      restart_policy:
-        condition: any
-        delay: 5s
-        window: 15s
-        max_attempts: 10
+
+    # for docker-compose	  
+    restart: unless-stopped
+    # for swarm
+#    deploy:
+#      mode: global
+#      restart_policy:
+#        condition: any
+#        delay: 5s
+#        window: 15s
+#        max_attempts: 10
+
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/"]
       interval: 10s
