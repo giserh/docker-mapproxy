@@ -8,6 +8,13 @@ services:
       abstract: Scanned and georeferenced geologic maps for Clatsop County
 
 layers:
+  - name: svensen_quad
+    title: Svensen QuadBulletin
+    md: 
+      attribution:
+        title: Bulletin 74 Svensen Quad
+    sources: [svensen_cache]
+
   - name: cathlamet_quad
     title: Cathlamet Quad
     md:
@@ -65,4 +72,15 @@ caches:
       # to unpack a file cathlamet_quad.tpkx into */cache/cathlamet_quad
       #   docker run --rm -v ${PWD}/cathlamet_quad.tpkx:/tmp/package.zip -v mapproxy_cache:/cache -w /cache/cathlamet_quad busybox unzip /tmp/package.zip
       directory: /srv/mapproxy/cache/cathlamet_quad/tile
+
+  svensen_cache:
+    sources: []
+    grids: [GLOBAL_WEBMERCATOR]
+    cache:
+      type: compact
+      version: 2
+      # The tpkx file unpacks to "tile" so for example,
+      # to unpack a file cathlamet_quad.tpkx into */cache/cathlamet_quad
+      #   docker run --rm -v ${PWD}/74_Bulletin_Svensen_Quad.tpkx:/tmp/package.zip -v mapproxy_cache:/cache -w /cache/svensen_quad busybox unzip /tmp/package.zip
+      directory: /srv/mapproxy/cache/svensen_quad/tile
 
