@@ -7,9 +7,10 @@ Swarm will no longer work. Sigh. So it's Docker Compose only for now.
 
 Mapproxy is now at 1.14
 
-There is now a changes file. :-)
+There is now a CHANGES.txt file. :-)
 
 There is no longer a "build" section in the compose file,
 I expect to pull the automatically built image from Docker Hub
 from now on.
 
+Builds are done via the magic of Github Actions and pushed to Docker Hub.
