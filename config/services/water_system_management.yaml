@@ -1,0 +1,48 @@
+base: ../globals.yaml
+
+services:
+  demo:
+  wms:
+    md:
+      title: Water System Maps
+      abstract: Georeferenced water system maps for Clatsop County
+layers:
+  - name: water_system_maps
+    title: Water System Maps
+    md:
+      attribution:
+        title: Knappa Water Association
+
+    # You can put all the layers in one group like this, underneath "water_system_maps"
+    # or you can put in a separate top level "layers" entry for each service.
+    # The results are the same in ArcGIS Online but grouping them this way
+    # looks better, there are not as many levels of "folders" to deal with.
+    
+    layers:
+      - name: water_systems
+        title: Water Systems
+        sources: [water_systems_cache]
+
+      - name: water_system_boundaries
+        title: Water System Boundaries
+        sources: [water_system_boundaries_cache]
+
+caches:
+# There are no sources for these caches, 
+# because we're using tile packages generated in ArcGIS Pro
+  water_systems_cache:
+    sources: []
+    grids: [GLOBAL_WEBMERCATOR]
+    cache:
+      type: compact
+      version: 2
+      # To unpack a file water_systems.tpkx into */cache/water_systems/
+      #   docker run --rm -v ${PWD}/water_systems.tpkx:/tmp/package.zip -v mapproxy_cache:/cache -w /cache/water_systems busybox unzip /tmp/package.zip
+      directory: /srv/mapproxy/cache/water_systems/tile
+  water_system_boundaries_cache:
+    sources: []
+    grids: [GLOBAL_WEBMERCATOR]
+    cache:
+      type: compact
+      version: 2
+      directory: /srv/mapproxy/cache/water_system_boundaries/tile

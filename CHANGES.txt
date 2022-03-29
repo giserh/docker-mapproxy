@@ -1,3 +1,8 @@
+2022-03-29
+
+With addition of a STATIC_IP_ADDRESS in docker-compose.yml, Docker
+Swarm will no longer work. Sigh. So it's Docker Compose only for now.
+
 2022-03-03
 
 Mapproxy is now at 1.14
