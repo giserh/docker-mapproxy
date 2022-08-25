@@ -1,13 +1,12 @@
 # JUST MAPPROXY, NO COUCHDB
-
 version: '3.7'
 volumes:
   cache:
       name: mapproxy_cache
 
 networks:
-  proxy_net:
-    name: proxy_net
+  proxy:
+    name: ${NETWORK_NAME}
     external: true
 
 #configs:
@@ -16,35 +15,25 @@ networks:
 
 services:
   mapproxy:
-    image: wildsong/mapproxy:latest
+    image: wildsong/mapproxy_server:latest
     env_file: .env
     build:
       context: .
-      dockerfile: Dockerfile.mapproxy
-      args:
-        - VIRTUAL_HOST=${VIRTUAL_HOST}
-        - VIRTUAL_PORT=${VIRTUAL_PORT}
-        - LETSENCRYPT_HOST=${VIRTUAL_HOST}
-        - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
-
-    # I tried to create a CMD script (start_mapproxy.sh) to load the environment
-    # from a swarm "config" or a volume in compose
-    # but apparently that would not work
-    # so far this is the only reliable way that works in both places
-
+      dockerfile: Dockerfile.mapproxy_server
     volumes:
       - ./config:/srv/mapproxy/config:ro
       - cache:/srv/mapproxy/cache
-
+    labels:
+      caddy: giscache.${DOMAIN}
+      caddy.reverse_proxy: "{{upstreams 8080}}"
+      caddy.tls.protocols: "tls1.3"
     # This will be passed to start_mapproxy.py and
     # points to a folder, so mapproxy will start as a multiservice.
     command: ['/srv/mapproxy/config/services']
-      
 #    configs:
 #      - mapproxy_env
-
     networks:
-      proxy_net:
+      proxy:
       
     # ArcGIS clients can't connect on HTTP. Portal
     # ALWAYS redirects to port 443, so you HAVE TO listen there (via proxy)
@@ -59,14 +48,15 @@ services:
     # to manually copy an existing service and then edit it.
 
     # For testing I want to be able to hit the server without any proxy, so, I do this
-    ports:
-      - "8888:8080"
-    deploy:
-      mode: global
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        window: 15s
+#    ports:
+#      - "8888:8080"
+#    deploy:
+#      mode: global
+#      restart_policy:
+#        condition: on-failure
+#        delay: 5s
+#        window: 15s
+
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/"]
       interval: 10s
