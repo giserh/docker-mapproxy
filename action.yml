@@ -1,0 +1,6 @@
+name: "Mapproxy"
+description: "Mapproxy is a proxy that caches WMS map services."
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+

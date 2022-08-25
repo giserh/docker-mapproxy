@@ -11,7 +11,6 @@ globals:
     base_dir: '/srv/mapproxy/cache'
     lock_dir: '/srv/mapproxy/cache/locks'
     tile_lock_dir: '/srv/mapproxy/cache/tile_locks'
-
   image:
     formats:
       image/png:

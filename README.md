@@ -8,40 +8,64 @@ public server located in Oregon.
 
 The tiles are cached in a tile store; I've switched from using CouchDB
 to SQLite. There is now only one container, so there are never any
-connection problems. The CouchDB code is still hanging around.
+connection problems. The CouchDB code is still hanging around,
+should anyone want to revive it.
 
 This version of the project uses either Docker Compose (for testing)
-or Docker Swarm for production.
+or Docker Swarm (for production). As I only do small projects I have
+generally given up on Docker Swarm as too complicated for my needs.
 
 The docker-compose.yml will set up a single container, containing mapproxy.
 
-The docker-compose-couchdb.yml file will set up both MapProxy and CouchDB
+The docker-compose-couchdb.yml file (which might not work any more)
+will set up both MapProxy and CouchDB
 docker containers and link them together over a private docker network.
 
 ArcGIS servers refuse to connect to unencrypted WMS services (HTTP).
 I get around this by running MapProxy behind an nginx server. The
-Dockerfile.mapproxy and Docker Compose files here work with the proxy
+Dockerfile and Docker Compose files here work with the proxy
 described in my github repository Wildsong/proxy.
+
+## Locale
+
+Near the end of the Dockerfile, I have a line that pulls the datum
+file for **North America**.  If you want to use this image and live
+somewhere else, tell me and I will add it for you.  Send a pull
+request or an email or open an issue.
 
 ## Build
 
+You can build locally but Github Actions will build and push an image
+to Docker Hub. Skip ahead.
+
 First customize a .env file, then build an image.
 
-    cp sample.env .env
-    emacs .env
-    docker-compose build
+```bash
+cp sample.env .env
+emacs .env
+docker buildx build -t wildsong/mapproxy .
+```
 
-### Note on git version
+### Note on Conda
 
-There's a bug in 1.12 mapproxy so the Dockerfile pulls newer source from git.
-To see the bug, do this in python 3.8 (it won't affect older pythons).
+Using conda to pull in the python dependencies 
+pulls in newer releases than pip (for example, libgeos) 
+so it's the easiest path I can find.
 
-    import mapproxy.compat.modules
-    mapproxy.compat.modules.__dir__()
+ContinuumIO based their Conda image on Debian 11. It was great until
+today when I could no longer run the apt-update step for some reason.
+So now the Dockerfile builds on a Debian image and adds miniconda3.
 
-The output should show the 'escape' function is available, but fails
-in the released 1.12.  I plan on using the released package at 1.13,
-should it ever come out.
+### Note on git version of Mapproxy
+
+I started using the git version of mapproxy when there was a bug in
+the 1.12 release preventing me from building. I've just stuck with git
+process since then.
+
+I used to use curl to pull the release version; I would use git now so
+curl is no longer being installed.
+
+Conda also installs git, probably because Debian git was too old.
 
 ## Configure
 
@@ -55,22 +79,27 @@ single service only.
 
 ### Check this project's config
 
-   docker-compose config
+```bash
+docker-compose config
+```
 
 ## How to run it
 
 These commands work,
 
-   docker-compose up
+```bash
+docker-compose up
+```
 
 or
 
-   docker stack deploy -c docker-compose.yml mapproxy
-
+```bash
+docker stack deploy -c docker-compose.yml mapproxy
+```
 
 ### Set up CouchDB
 
-I am not using CouchDB right now, this is here should I switch back to it.
+***I am not using CouchDB right now, this is here should I switch back to it.***
 
 The "deploy" command will bring up mapproxy and couchdb, but the first
 time it starts you will have to tell couchdb that this is a
@@ -150,12 +179,16 @@ Docker volume. In my case as root I edit
 
 Start a shell connection to the running docker for mapproxy.
 
-   docker exec -it mapproxy bash
+```bash
+docker exec -it mapproxy bash
+```
 
 Run the seed command. (The "-c 4" says use 4 processes)
 
-   cd config
-   mapproxy-seed -c 4 -f mapproxy.yaml -s seed.yaml
+```bash
+cd config
+mapproxy-seed -c 4 -f mapproxy.yaml -s seed.yaml
+```
 
 On Linux you could run it in background.
 
@@ -173,12 +206,16 @@ The configuration files are mounted from the config/ directory.
     
 I suppose you need to restart MapProxy to get it to reread the change.
 
-    docker-compose restart
+```bash
+docker-compose restart
+```
 
 or
 
-    docker stack rm mapproxy
-    docker stack deploy -c docker-compose.yml mapproxy
+```bash
+docker stack rm mapproxy
+docker stack deploy -c docker-compose.yml mapproxy
+```
 
 If you are using CouchDB remember to empty the appropriate cache
 database(s) in CouchDB so that they will get new data.
@@ -199,48 +236,39 @@ Links to some of the code I use
 
 ## TO DO LIST
 
+2022-Mar-03
+
+I might be able to shrink the image size by going to a two stage build.
+I have tried but not got it going, see Dockerfile.twostage.
+
 2020-Aug-29
 
 I have a docker-compose set up running that works for 24-48 hours and then suddenly,
 it stops resolving couchdb so the data connection fails and it's dead. Rather than
 wrestle with it I have switched to SQLite. I have implemented a healthcheck too.
 
-
-As of 2020-Aug-19
-
-I am stuck at couchdb 2.3.x because user/pass keeps mapproxy out in 3.x
-FIGURE OUT AUTH, mapproxy has to send credentials to couchdb,
-or stop using couch I suppose. :-(
-
-I stopped working on a Windows Server version because it was just
-easier to get a Debian container running. We have the best IT staff in
-the world here in Clatsop County.
-
-TODO: Currently you must manually create databases to hold the tiles.
-Maybe I should automate it?
-
-TODO: Show how to use MapProxy and CouchDB on different servers. (SWARM!)
-
 TODO: Configure a separate container for each service instead of using the
 mapproxy multiple service feature. EG
 
 Currently I have 3 services visible all in one container, 
-    https://mapproxy.wildsong.biz/bulletin
-    https://mapproxy.wildsong.biz/aerials
-    https://mapproxy.wildsong.biz/lidar
+
+* https://mapproxy.wildsong.biz/bulletin
+* https://mapproxy.wildsong.biz/aerials
+* https://mapproxy.wildsong.biz/lidar
 
 Instead those should be in separate containers so that I can work on
 them independently.  To do this I have to figure out the nginx
 changes. This will help a lot at CC anyway since I have limited access
 to DNS.
 
-
 First time start, create the databases, see
 https://docs.couchdb.org/en/stable/setup/single-node.html
 
-    curl -X PUT http://127.0.0.1:5984/_users
-    curl -X PUT http://127.0.0.1:5984/_replicator
-    curl -X PUT http://127.0.0.1:5984/_global_changes
+```bash
+curl -X PUT http://127.0.0.1:5984/_users
+curl -X PUT http://127.0.0.1:5984/_replicator
+curl -X PUT http://127.0.0.1:5984/_global_changes
+```
 
 Admin accounts go into a text file called local.ini not a database, see
 https://docs.couchdb.org/en/stable/config/auth.html#config-admins
