@@ -15,11 +15,6 @@ multiservice = os.path.isdir(config)
 
 fileConfig(logfile, {'here': os.path.dirname(__file__)})
 
-try:
-    myport = os.environ['VIRTUAL_PORT']
-except:
-    myport=8080
-
 if os.path.isdir(config):
     # The config is a directory, so
     # the MapProxy will start as a multi service
@@ -32,4 +27,4 @@ else:
     from mapproxy.wsgiapp import make_wsgi_app
     application = make_wsgi_app(config, reloader = True)
 
-waitress.serve(application, threads=16, host='0.0.0.0', port=myport)
+waitress.serve(application, threads=16, host='0.0.0.0', port=8080)
